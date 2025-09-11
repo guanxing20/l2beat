@@ -1,7 +1,7 @@
 import type { Milestone } from '@l2beat/config'
 import type { TooltipProps } from 'recharts'
 import { Area, AreaChart } from 'recharts'
-import type { ChartMeta } from '~/components/core/chart/Chart'
+import type { ChartMeta, ChartProject } from '~/components/core/chart/Chart'
 import {
   ChartContainer,
   ChartLegend,
@@ -12,6 +12,7 @@ import {
 import { ChartDataIndicator } from '~/components/core/chart/ChartDataIndicator'
 import { getCommonChartComponents } from '~/components/core/chart/utils/getCommonChartComponents'
 import { HorizontalSeparator } from '~/components/core/HorizontalSeparator'
+import { formatPercent } from '~/utils/calculatePercentageChange'
 import { formatTimestamp } from '~/utils/dates'
 import { formatCurrency } from '~/utils/number-format/formatCurrency'
 import type { ChartUnit } from '../../types'
@@ -34,6 +35,7 @@ interface Props {
   isLoading: boolean
   tickCount?: number
   className?: string
+  project?: ChartProject
 }
 
 export const assetCategoryTvsChartMeta = {
@@ -69,13 +71,18 @@ export function AssetCategoryTvsChart({
   tickCount,
   dataKeys,
   toggleDataKey,
+  project,
 }: Props) {
+  // If only one data key is selected we want to change the domain
+  // Having it from 0 to MAX does make sense for stacked chart (better comparison)
+  // But for single one it should not start from 0
   return (
     <ChartContainer
       data={data}
       meta={assetCategoryTvsChartMeta}
       isLoading={isLoading}
       milestones={milestones}
+      project={project}
       interactiveLegend={{
         dataKeys,
         onItemClick: toggleDataKey,
@@ -83,15 +90,20 @@ export function AssetCategoryTvsChart({
       className={className}
     >
       <AreaChart data={data} margin={{ top: 20 }}>
-        <ChartLegend content={<ChartLegendContent reverse />} />
+        <ChartLegend content={<ChartLegendContent />} />
         <Area
           dataKey="other"
           hide={!dataKeys.includes('other')}
           fill={assetCategoryTvsChartMeta.other.color}
           fillOpacity={1}
           strokeWidth={0}
-          stackId="a"
+          stackId={dataKeys.length === 1 ? undefined : 'a'}
           isAnimationActive={false}
+          activeDot={
+            !dataKeys.includes('ether') &&
+            !dataKeys.includes('stablecoin') &&
+            !dataKeys.includes('btc')
+          }
         />
         <Area
           dataKey="btc"
@@ -99,8 +111,11 @@ export function AssetCategoryTvsChart({
           fill={assetCategoryTvsChartMeta.btc.color}
           fillOpacity={1}
           strokeWidth={0}
-          stackId="a"
+          stackId={dataKeys.length === 1 ? undefined : 'a'}
           isAnimationActive={false}
+          activeDot={
+            !dataKeys.includes('ether') && !dataKeys.includes('stablecoin')
+          }
         />
         <Area
           dataKey="stablecoin"
@@ -108,9 +123,9 @@ export function AssetCategoryTvsChart({
           fill={assetCategoryTvsChartMeta.stablecoin.color}
           fillOpacity={1}
           strokeWidth={0}
-          stackId="a"
+          stackId={dataKeys.length === 1 ? undefined : 'a'}
           isAnimationActive={false}
-          activeDot={false}
+          activeDot={!dataKeys.includes('ether')}
         />
         <Area
           dataKey="ether"
@@ -118,14 +133,14 @@ export function AssetCategoryTvsChart({
           fill={assetCategoryTvsChartMeta.ether.color}
           fillOpacity={1}
           strokeWidth={0}
-          stackId="a"
+          stackId={dataKeys.length === 1 ? undefined : 'a'}
           isAnimationActive={false}
-          activeDot={false}
         />
         {getCommonChartComponents({
           data,
           isLoading,
           yAxis: {
+            domain: dataKeys.length === 1 ? ['auto', 'auto'] : undefined,
             tickFormatter: (value: number) => formatCurrency(value, unit),
             tickCount,
           },
@@ -161,7 +176,7 @@ function CustomTooltip({
 
   return (
     <ChartTooltipWrapper>
-      <div className="flex w-44 xs:w-56! flex-col">
+      <div className="flex w-46 flex-col sm:w-66!">
         <div className="font-medium text-label-value-14 text-secondary">
           {formatTimestamp(label, { longMonthName: true, mode: 'datetime' })}
         </div>
@@ -200,11 +215,20 @@ function CustomTooltip({
                     {config.label}
                   </span>
                 </span>
-                <span className="whitespace-nowrap font-medium text-label-value-15">
-                  {entry.value !== null && entry.value !== undefined
-                    ? formatCurrency(entry.value, unit)
-                    : 'No data'}
-                </span>
+                <div className="flex items-end justify-end gap-1 max-sm:flex-col sm:items-center">
+                  <span className="whitespace-nowrap font-medium text-label-value-15">
+                    {entry.value !== null && entry.value !== undefined
+                      ? formatCurrency(entry.value, unit)
+                      : 'No data'}
+                  </span>
+                  {entry.value !== null &&
+                    entry.value !== undefined &&
+                    total !== null && (
+                      <span className="font-medium text-label-value-13 text-secondary sm:text-label-value-15">
+                        ({formatPercent(entry.value / total)})
+                      </span>
+                    )}
+                </div>
               </div>
             )
           })}

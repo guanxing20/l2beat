@@ -20,8 +20,8 @@ export interface WarningWithSentiment {
   sentiment: 'bad' | 'warning' | 'neutral'
 }
 
-export interface TableReadyValue {
-  value: string
+export interface TableReadyValue<T extends string = string> {
+  value: T
   secondLine?: string
   description?: string
   sentiment?: Sentiment
@@ -127,6 +127,7 @@ export interface BaseProject {
   isUpcoming?: true
   archivedAt?: UnixTime
   hasActivity?: true
+  hasTestnet?: true
 }
 
 // #region common data
@@ -332,7 +333,7 @@ export interface ProjectBridgeTechnology {
 // #region scaling data
 export interface ProjectScalingInfo {
   layer: 'layer2' | 'layer3'
-  type: ProjectScalingCategory
+  type: ProjectScalingCategory | undefined
   capability: ProjectScalingCapability
   reasonsForBeingOther: ReasonForBeingInOther[] | undefined
   hostChain: {
@@ -349,6 +350,7 @@ export interface ProjectScalingInfo {
   stage: ProjectStageName
   purposes: ProjectScalingPurpose[]
   scopeOfAssessment: ProjectScalingScopeOfAssessment | undefined
+  proofSystem: ProjectScalingProofSystem | undefined
 }
 
 export type ProjectScalingCategory =
@@ -358,6 +360,17 @@ export type ProjectScalingCategory =
   | 'Validium'
   | 'Optimium'
   | 'Other'
+
+export interface ProjectScalingProofSystem {
+  /** Type of proof system */
+  type: 'Optimistic' | 'Validity'
+  /** Name of the proof system. Only one of name or zkCatalogId should be provided. */
+  name?: string
+  /** Id for ZkCatalog project to link to. Only one of name or zkCatalogId should be provided. */
+  zkCatalogId?: string
+  /** Challenge protocol of the proof system. Configured only for optimistic proof systems. */
+  challengeProtocol?: 'Interactive' | 'Single-step'
+}
 
 export type ProjectScalingCapability = 'universal' | 'appchain'
 
@@ -417,6 +430,7 @@ export type ProjectScalingPurpose =
   | 'RWA'
   | 'IoT'
   | 'Restaking'
+  | 'Enterprise'
 
 export type ProjectScalingStage =
   | StageNotApplicable
@@ -477,13 +491,20 @@ export interface StageNotApplicable {
   stage: 'NotApplicable'
 }
 export interface ProjectScalingRisks {
-  self: ProjectScalingRiskView
-  host: ProjectScalingRiskView | undefined
-  stacked: ProjectScalingRiskView | undefined
+  self: ProjectRiskView
+  host: ProjectRiskView | undefined
+  stacked: ProjectRiskView | undefined
 }
 
-export interface ProjectScalingRiskView {
-  stateValidation: TableReadyValue
+export interface ProjectRiskView {
+  stateValidation: TableReadyValue & {
+    /** @unit seconds */
+    executionDelay?: number
+    /** @unit seconds */
+    challengeDelay?: number
+    /** @unit ETH */
+    initialBond?: string
+  }
   dataAvailability: TableReadyValue
   exitWindow: TableReadyValue
   sequencerFailure: TableReadyValue
@@ -614,7 +635,7 @@ export interface DaLayerThroughput {
    * Batch size for data availability. Together with batchFrequency it determines max throughput.
    * @unit B - bytes
    */
-  size: number
+  size: number | 'NO_CAP'
   /**
    * Desired size of blob data per block. Should be less than or equal to size.
    * @unit B - bytes
@@ -653,6 +674,14 @@ export interface ProjectDaBridge {
   risks: DaBridgeRisks
   usedIn: UsedInProject[]
   dac?: DacInfo
+  relayerType?: TableReadyValue<'Permissioned'>
+  validationType?: DaBridgeValidationType
+}
+
+type DaBridgeValidationType = TableReadyValue<
+  'Validity Proof' | 'BLS Signature'
+> & {
+  zkCatalogId?: ProjectId
 }
 
 export interface DaBridgeRisks {
@@ -913,7 +942,7 @@ export interface CelestiaDaTrackingConfig {
 export interface AvailDaTrackingConfig {
   type: 'avail'
   daLayer: ProjectId
-  appId: string
+  appIds: string[]
   sinceBlock: number
   untilBlock?: number
 }
@@ -928,6 +957,8 @@ export interface EigenDaTrackingConfig {
 
 export interface ProjectEcosystemInfo {
   id: ProjectId
+  /** Is this project part of the Superchain? Only used with id: 'superchain' */
+  isPartOfSuperchain?: boolean
   sinceTimestamp?: UnixTime
   untilTimestamp?: UnixTime
 }
@@ -987,7 +1018,7 @@ export interface ProjectPermissionedAccount {
   url: string
   address: ChainSpecificAddress
   isVerified: boolean
-  type: 'EOA' | 'Contract'
+  type: 'EOA' | 'Contract' | 'Reference'
 }
 
 export interface ProjectContracts {
@@ -1085,7 +1116,7 @@ export interface ProjectDiscoveryInfo {
   isDiscoDriven: boolean
   permissionsDiscoDriven: boolean
   contractsDiscoDriven: boolean
-  timestampPerChain: Record<string, number>
+  baseTimestamp: number | undefined
   hasDiscoUi: boolean
 }
 // #endregion

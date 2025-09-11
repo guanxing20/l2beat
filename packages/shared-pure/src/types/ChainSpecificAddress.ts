@@ -40,6 +40,7 @@ const SHORT_TO_LONG_CHAIN_NAMES = {
   everclear: 'everclear',
   zircuit: 'zircuit',
   katana: 'katana',
+  taiko: 'taiko',
   facet: 'facet',
   gateway: 'gateway',
 } as const
@@ -97,7 +98,8 @@ ChainSpecificAddress.from = function from(
   shortChainName: string,
   pureAddress: string | EthereumAddress,
 ) {
-  return ChainSpecificAddress(`${shortChainName}:${pureAddress}`)
+  const pureAddressPadded = EthereumAddress.from(pureAddress)
+  return ChainSpecificAddress(`${shortChainName}:${pureAddressPadded}`)
 }
 
 ChainSpecificAddress.fromLong = function from(

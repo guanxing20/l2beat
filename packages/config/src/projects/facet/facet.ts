@@ -4,7 +4,11 @@ import {
   ProjectId,
   UnixTime,
 } from '@l2beat/shared-pure'
+import { formatEther } from 'ethers/lib/utils'
 import {
+  DA_BRIDGES,
+  DA_LAYERS,
+  DA_MODES,
   DATA_ON_CHAIN,
   EXITS,
   FORCE_TRANSACTIONS,
@@ -12,7 +16,6 @@ import {
   RISK_VIEW,
 } from '../../common'
 import { BADGES } from '../../common/badges'
-import { formatExecutionDelay } from '../../common/formatDelays'
 import { getStage } from '../../common/stages/getStage'
 import { ProjectDiscovery } from '../../discovery/ProjectDiscovery'
 import type { ScalingProject } from '../../internalTypes'
@@ -28,6 +31,11 @@ const FALLBACK_TIMEOUT_SECS = discovery.getContractValue<number>(
 const MAX_CHALLENGE_SECS = discovery.getContractValue<number>(
   'Rollup',
   'MAX_CHALLENGE_SECS',
+)
+
+const proposerBond = discovery.getContractValue<number>(
+  'Rollup',
+  'PROPOSER_BOND',
 )
 
 export const facet: ScalingProject = {
@@ -56,6 +64,8 @@ export const facet: ScalingProject = {
   },
   proofSystem: {
     type: 'Optimistic',
+    zkCatalogId: ProjectId('sp1'),
+    challengeProtocol: 'Single-step',
   },
   stage: getStage(
     {
@@ -92,7 +102,6 @@ export const facet: ScalingProject = {
     headerWarning:
       'The vast majority of funds bridged to Facet are bridged through external non-canonical bridges. Note that external bridges may introduce additional trust assumptions and the bridge-related aspects of the Stage and risk rosette assessment on this page apply only to bridges using the same proof system as the canonical bridge. L2BEAT is working on a TVS and asset framework to assess the risks of individual tokens, you can follow the latest updates [here](https://forum.l2beat.com/t/assets-bridges-and-tvs/388).',
     purposes: ['Universal'],
-    category: 'Optimistic Rollup',
     links: {
       websites: ['https://facet.org/'],
       bridges: [
@@ -122,6 +131,14 @@ export const facet: ScalingProject = {
           'eth:0x0000000000000b07ED001607f5263D85bf28Ce4C',
         ),
         tokens: ['ETH'],
+        source: 'external',
+        bridgedUsing: {
+          bridges: [
+            {
+              name: 'Facet fast bridge',
+            },
+          ],
+        },
         description: 'Fast external bridge contract.',
       }),
       discovery.getEscrowDetails({
@@ -129,6 +146,14 @@ export const facet: ScalingProject = {
           'eth:0x8F75466D69a52EF53C7363F38834bEfC027A2909',
         ),
         tokens: ['ETH', 'WETH'],
+        source: 'external',
+        bridgedUsing: {
+          bridges: [
+            {
+              name: 'Facet deprecated bridge',
+            },
+          ],
+        },
         description: 'L1ETHLockbox (deprecated).',
       }),
     ],
@@ -199,11 +224,23 @@ export const facet: ScalingProject = {
         },
       },
     ],
+    activityConfig: {
+      type: 'block',
+      startBlock: 1,
+      adjustCount: { type: 'SubtractOne' },
+    },
+  },
+  dataAvailability: {
+    layer: DA_LAYERS.ETH_CALLDATA,
+    bridge: DA_BRIDGES.ENSHRINED,
+    mode: DA_MODES.TRANSACTION_DATA,
   },
   riskView: {
     stateValidation: {
       ...RISK_VIEW.STATE_ZKP_OPTIMISTIC,
-      secondLine: formatExecutionDelay(MAX_CHALLENGE_SECS),
+      challengeDelay: MAX_CHALLENGE_SECS,
+      executionDelay: 0,
+      initialBond: formatEther(proposerBond),
     },
     dataAvailability: {
       ...DATA_ON_CHAIN,
@@ -312,9 +349,7 @@ export const facet: ScalingProject = {
     addresses: discovery.getDiscoveredContracts(),
     risks: [],
   },
-  permissions: {
-    addresses: discovery.getDiscoveredPermissions(),
-  },
+  permissions: discovery.getDiscoveredPermissions(),
   chainConfig: {
     name: 'facet',
     chainId: 1027303,

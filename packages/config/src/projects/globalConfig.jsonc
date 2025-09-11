@@ -1,5 +1,5 @@
 {
-  "import": ["globalTokens.jsonc"],
+  "import": ["globalTokens.jsonc", "globalEntrypoints.jsonc"],
   "categories": {
     "core": {
       "name": "Local Infrastructure",
@@ -151,7 +151,7 @@
     "eth:0x1a5BA9447D02Ddaf7bcB5594Fc27dE2Daf588930": "Avail Multisig 2",
     "eth:0x02993cdC11213985b9B13224f3aF289F03bf298d": "Vector",
     "eth:0x42F38ec5A75acCEc50054671233dfAC9C0E7A3F6": "Gnosis Bridge Multisig",
-    "eth:0x670a3e447F4DE92C012777Ac5591D81E12aD0957": "Hashi Multisig",
+    "eth:0x4b5F5231e2F08Ad49d79Ce5672A8339a63Cfbd43": "Hashi Multisig",
     "eth:0xA4fB12D15Eb85dc9284a7df0AdBC8B696EdbbF1d": "Alchemy Multisig 1",
     "eth:0x9BA6e03D8B90dE867373Db8cF1A58d2F7F006b3A": "OpFoundationOperationsSafe",
     "eth:0x847B5c174615B1B7fDF770882256e2D3E95b9D92": "OpFoundationUpgradeSafe",
@@ -178,12 +178,15 @@
     "eth:0x67CA7Ca75b69711cfd48B44eC3F64E469BaF608C": "BlastMultisig 2",
     "eth:0x892bb7EeD71efB060ab90140e7825d8127991DD3": "Linea Multisig 1",
     "eth:0xB8F5524D73f549Cf14A0587a3C7810723f9c0051": "Linea Multisig 2",
+    "linea:0xf5cc7604a5ef3565b4D2050D65729A06B68AA0bD": "Linea Multisig 3",
+    "linea:0xB8F5524D73f549Cf14A0587a3C7810723f9c0051": "Linea Multisig 4",
     "eth:0xC91482A96e9c2A104d9298D1980eCCf8C4dc764E": "Bob Multisig 1",
     "eth:0xC73b6E6ec346f9f1A07D2e7A4380858D7BEa0194": "Bob Multisig 2",
     "eth:0xC463EaC02572CC964D43D2414023E2c6B62bAF38": "Zircuit Multisig 1",
     "eth:0x2c0B27F7C8F083B539557a0bA787041BF22DB276": "Zircuit Multisig 2",
     "eth:0x309Fe2536d01867018D120b40e4676723C53A14C": "Mode Multisig",
     "eth:0x9CBeE534B5D8a6280e01a14844Ee8aF350399C7F": "Taiko Multisig",
+    "taiko:0xCa5b76Cc7A38b86Db11E5aE5B1fc9740c3bA3DE8": "Taiko L2 Multisig",
     "eth:0x363e846B91AF677Fb82f709b6c35BD1AaFc6B3Da": "Taiko Foundation Treasury Multisig",
     "eth:0x9245d5D10AA8a842B31530De71EA86c0760Ca1b1": "Unichain Multisig 2",
     "eth:0xb0c4C487C5cf6d67807Bc2008c66fa7e2cE744EC": "Unichain Multisig 1",
@@ -257,6 +260,7 @@
     "eth:0xA3C2a579af4cF3853172058e5c76d273DC1542DD": "INTMAX Multisig 1",
     "scr:0xA3C2a579af4cF3853172058e5c76d273DC1542DD": "INTMAX Multisig 2",
     "eth:0xe147e23753505e2C83b5f9ef229a9B7e7B3F50Ea": "INTMAX Multisig 3",
+    "eth:0xBE634B030FEAaB661300667EaF82510a3a025413": "Stargate Multisig 2",
     // Taiko SC
     "eth:0xb47fe76ac588101bfbda9e68f66433ba51e8029a": "Daniel Wang",
     "eth:0x436a1075099A145417EBFc74BBaC9605e3e4f1A7": "Chainbound",
@@ -499,6 +503,8 @@
       "typeCaster": "Mapping",
       "arg": {
         // source: our discovery and random githubs
+        "793595346346724189681221050719974054861327641387231526786912662354259445535": "StarkNet OS (since v0.14.0)",
+        "760308386675154762009993173725077399730170358078020153308029499928875469870": "Starknet Aggregator (since v0.14.0)",
         "273279642033703284306509103355536170486431195329675679055627933497997642494": "Starknet Aggregator (since v0.13.4)",
         "2231644845387633655859130162745748394456578773184260372693322394988769337368": "StarkNet OS (since v0.13.4)",
         "15787695375210609250491147414005894154890873413229882671403677761527504080": "Starknet Aggregator (since v0.13.3)",

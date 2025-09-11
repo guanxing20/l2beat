@@ -174,6 +174,11 @@ export const nova: ScalingProject = orbitStackL2({
       { type: 'etherscan', chainId },
     ],
   },
+  nonTemplateProofSystem: {
+    type: 'Optimistic',
+    name: 'BoLD',
+    challengeProtocol: 'Interactive',
+  },
   upgradesAndGovernance: getNitroGovernance(
     l2CoreQuorumPercent,
     l2TimelockDelay,
