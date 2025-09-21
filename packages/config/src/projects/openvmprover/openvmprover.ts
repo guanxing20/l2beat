@@ -62,7 +62,7 @@ export const openvmprover: BaseProject = {
     
     ## Description
 
-    [OpenVM](https://github.com/openvm-org/openvm?tab=readme-ov-file) is a STARK proving system based on [Plonky3 proving library](https://github.com/Plonky3/Plonky3), that has “no-CPU” design paradigm and allows adding new custom instructions to its instruction set architecture (ISA). It supports [recursive STARK aggregation](https://book.openvm.dev/guest-libs/verify-stark.html) and provides an [SDK](https://github.com/openvm-org/openvm-solidity-sdk) for creating Solidity verifier smart contracts. 
+    [OpenVM](https://github.com/openvm-org/openvm?tab=readme-ov-file) is a STARK proving system based on [Plonky3 proving library](https://github.com/Plonky3/Plonky3), that has “no-CPU” design paradigm and allows adding new custom instructions to its instruction set architecture (ISA). It supports [recursive STARK aggregation](https://docs.openvm.dev/book/guest-libraries/verify-stark) and provides an [SDK](https://github.com/openvm-org/openvm-solidity-sdk) for creating Solidity verifier smart contracts. 
 
     ## Proof system
 
@@ -82,7 +82,7 @@ export const openvmprover: BaseProject = {
 
     ### Final wrap
 
-The STARK proof is wrapped in Halo2 SNARK with KZG commitments over BN254 curve for efficient onchain processing. KZG commitment relies on Perpetual Powers of Tau trusted setup ceremony, see [below](#trusted-setup) for more details.
+The STARK proof is wrapped in Halo2 SNARK with KZG commitments over BN254 curve for efficient onchain processing. KZG commitment relies on Perpetual Powers of Tau trusted setup ceremony, see [below](#trusted-setups) for more details.
 `,
     trustedSetups: [
       {
@@ -95,10 +95,12 @@ The STARK proof is wrapped in Halo2 SNARK with KZG commitments over BN254 curve 
         hash: '0xeea69613c0ab56b156122ce41ac52afc8434e8d2fa1b57cdd5e2c1491e06aaf9',
         proofSystem: ZK_CATALOG_TAGS.Plonk.Halo2,
         knownDeployments: [
-          'https://etherscan.io/address/0x39854DF30b3482Ef546F68B8981Fae5A2C426eA4',
+          {
+            address: '0x39854DF30b3482Ef546F68B8981Fae5A2C426eA4',
+            chain: 'ethereum',
+          },
         ],
         verificationStatus: 'notVerified',
-        usedBy: [ProjectId('scroll')],
         description:
           "Custom verifier ID: SHA256 hash of the verifier byte code string in the hex format '0x...'.",
       },
