@@ -34,6 +34,9 @@ const challengePeriod = discovery.getContractValue<number>(
   'TIME_TO_FINALIZE',
 )
 
+// Fuel uses EigenDA v2 but doesn't have discovery configuration for version
+const eigenDACertVersion = 'v2'
+
 export const fuel: ScalingProject = {
   id: ProjectId('fuel'),
   capability: 'universal',
@@ -106,13 +109,12 @@ export const fuel: ScalingProject = {
         ],
         untilBlock: 22837254,
       },
-      // TODO: add as soon as we have their customerId
-      // {
-      //   type: 'eigen-da',
-      //   customerId: '',
-      //   daLayer: ProjectId('eigenda'),
-      //   sinceTimestamp: UnixTime(1751528219),
-      // },
+      {
+        type: 'eigen-da',
+        customerId: '0xea0337efc12e98ab118948da570c07691e8e4b37',
+        daLayer: ProjectId('eigenda'),
+        sinceTimestamp: UnixTime(1751526000),
+      },
     ],
     trackedTxs: [
       {
@@ -164,7 +166,7 @@ export const fuel: ScalingProject = {
       ...RISK_VIEW.STATE_NONE,
       challengeDelay: challengePeriod,
     },
-    dataAvailability: RISK_VIEW.DATA_EIGENDA(false),
+    dataAvailability: RISK_VIEW.DATA_EIGENDA(false, eigenDACertVersion),
     exitWindow: RISK_VIEW.EXIT_WINDOW(0, challengePeriod),
     sequencerFailure: RISK_VIEW.SEQUENCER_SELF_SEQUENCE(),
     proposerFailure: RISK_VIEW.PROPOSER_CANNOT_WITHDRAW,

@@ -32,8 +32,8 @@ import { getDataAvailabilitySection } from '~/utils/project/technology/getDataAv
 import { getOperatorSection } from '~/utils/project/technology/getOperatorSection'
 import { getOtherConsiderationsSection } from '~/utils/project/technology/getOtherConsiderationsSection'
 import { getSequencingSection } from '~/utils/project/technology/getSequencingSection'
-import { getStateValidationSection } from '~/utils/project/technology/getStateValidationSection'
 import { getWithdrawalsSection } from '~/utils/project/technology/getWithdrawalsSection'
+import { getStateValidationSection } from '~/utils/project/technology/state-validation/getStateValidationSection'
 import { getScalingTvsSection } from '~/utils/project/tvs/getScalingTvsSection'
 import {
   getUnderReviewStatus,
@@ -47,7 +47,7 @@ import { getLiveness } from '../liveness/getLiveness'
 import { get7dTvsBreakdown } from '../tvs/get7dTvsBreakdown'
 import { getTokensForProject } from '../tvs/tokens/getTokensForProject'
 import { getAssociatedTokenWarning } from '../tvs/utils/getAssociatedTokenWarning'
-import { getScalingDaSolution } from './getScalingDaSolution'
+import { getScalingDaSolutions } from './getScalingDaSolutions'
 import type { ScalingRosette } from './getScalingRosetteValues'
 import { getScalingRosette } from './getScalingRosetteValues'
 
@@ -97,6 +97,8 @@ export interface ProjectScalingEntry {
           associated: number
           btc: number
           other: number
+          rwaPublic: number
+          rwaRestricted: number
         }
         warnings: WarningWithSentiment[]
         associatedTokens: ProjectAssociatedToken[]
@@ -139,7 +141,7 @@ export async function getScalingProjectEntry(
     | 'livenessInfo'
     | 'livenessConfig'
     | 'costsInfo'
-    | 'hasActivity'
+    | 'activityConfig'
     | 'colors'
     | 'ecosystemColors'
     | 'discoveryInfo'
@@ -147,7 +149,7 @@ export async function getScalingProjectEntry(
   >,
   helpers: SsrHelpers,
 ): Promise<ProjectScalingEntry> {
-  const daSolution = await getScalingDaSolution(project)
+  const daSolutions = await getScalingDaSolutions(project)
   const [
     projectsChangeReport,
     activityProjectStats,
@@ -159,19 +161,29 @@ export async function getScalingProjectEntry(
     activitySection,
     costsSection,
     dataPostedSection,
+    zkCatalogProjects,
+    allProjectsWithContracts,
+    allProjects,
   ] = await Promise.all([
     getProjectsChangeReport(),
     getActivityProjectStats(project.id),
-    get7dTvsBreakdown({ type: 'projects', projectIds: [project.id] }),
+    get7dTvsBreakdown({ type: 'layer2' }),
     getTokensForProject(project),
     getLiveness(project.id),
     getContractUtils(),
-    getScalingTvsSection(helpers, project),
+    getScalingTvsSection(project),
     getActivitySection(helpers, project),
     getCostsSection(helpers, project),
-    project.scalingInfo.layer === 'layer2'
-      ? await getDataPostedSection(helpers, project, daSolution)
-      : undefined,
+    getDataPostedSection(helpers, project),
+    ps.getProjects({
+      select: ['zkCatalogInfo'],
+    }),
+    ps.getProjects({
+      select: ['contracts'],
+    }),
+    ps.getProjects({
+      optional: ['daBridge', 'isBridge', 'isScaling', 'isDaLayer'],
+    }),
   ])
 
   const projectLiveness = liveness[project.id]
@@ -212,16 +224,13 @@ export async function getScalingProjectEntry(
             },
             warning: project.tvsInfo.warnings[0],
             tokens: {
-              breakdown: {
-                ...tvsProjectStats.breakdown,
-                associated: tvsProjectStats.associated.total,
-              },
+              breakdown: tvsProjectStats.breakdown,
               warnings: compact([
                 tvsProjectStats &&
                   tvsProjectStats.breakdown.total > 0 &&
                   getAssociatedTokenWarning({
                     associatedRatio:
-                      tvsProjectStats.associated.total /
+                      tvsProjectStats.breakdown.associated /
                       tvsProjectStats.breakdown.total,
                     name: project.name,
                     associatedTokens: project.tvsInfo.associatedTokens,
@@ -238,6 +247,21 @@ export async function getScalingProjectEntry(
   }
 
   const changes = projectsChangeReport.getChanges(project.id)
+
+  const dataAvailabilitySection = getDataAvailabilitySection(
+    project,
+    daSolutions,
+  )
+  const withdrawalsSection = getWithdrawalsSection(project)
+  const sequencingSection = getSequencingSection(project)
+  const operatorSection = getOperatorSection(project)
+  const stateValidationSection = getStateValidationSection(
+    project,
+    zkCatalogProjects,
+    contractUtils,
+    tvsStats,
+    allProjects,
+  )
 
   const common = {
     type: project.scalingInfo.layer,
@@ -258,7 +282,13 @@ export async function getScalingProjectEntry(
     },
     header,
     reasonsForBeingOther: project.scalingInfo.reasonsForBeingOther,
-    rosette: getScalingRosette(project),
+    rosette: getScalingRosette(project, {
+      hasStateValidationSection: !!stateValidationSection,
+      hasDataAvailabilitySection: !!dataAvailabilitySection,
+      hasWithdrawalsSection: !!withdrawalsSection,
+      hasSequencingSection: !!sequencingSection,
+      hasOperatorsSection: !!operatorSection,
+    }),
     hostChainName: project.scalingInfo.hostChain.name,
     stageConfig:
       project.scalingInfo.type === 'Other'
@@ -318,7 +348,6 @@ export async function getScalingProjectEntry(
         tvsBreakdownUrl: `/scaling/projects/${project.slug}/tvs-breakdown`,
         milestones: sortedMilestones,
         tokens,
-        tvsProjectStats,
         tvsInfo: project.tvsInfo,
         project,
         ...scalingTvsSection,
@@ -499,10 +528,6 @@ export async function getScalingProjectEntry(
     })
   }
 
-  const dataAvailabilitySection = getDataAvailabilitySection(
-    project,
-    daSolution,
-  )
   if (dataAvailabilitySection) {
     sections.push({
       type: dataAvailabilitySection.type,
@@ -528,7 +553,6 @@ export async function getScalingProjectEntry(
     })
   }
 
-  const stateValidationSection = await getStateValidationSection(project)
   if (stateValidationSection) {
     sections.push({
       type: 'StateValidationSection',
@@ -556,7 +580,6 @@ export async function getScalingProjectEntry(
     })
   }
 
-  const operatorSection = getOperatorSection(project)
   if (operatorSection) {
     sections.push({
       type: 'TechnologyChoicesSection',
@@ -569,7 +592,6 @@ export async function getScalingProjectEntry(
     })
   }
 
-  const sequencingSection = getSequencingSection(project)
   if (sequencingSection) {
     sections.push({
       type: 'SequencingSection',
@@ -581,7 +603,6 @@ export async function getScalingProjectEntry(
     })
   }
 
-  const withdrawalsSection = getWithdrawalsSection(project)
   if (withdrawalsSection) {
     sections.push({
       type: 'TechnologyChoicesSection',
@@ -642,6 +663,8 @@ export async function getScalingProjectEntry(
     },
     contractUtils,
     projectsChangeReport,
+    zkCatalogProjects,
+    allProjectsWithContracts,
   )
   if (contractsSection) {
     sections.push({

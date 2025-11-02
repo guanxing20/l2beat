@@ -52,7 +52,7 @@ export interface Config {
   readonly da: DataAvailabilityTrackingConfig | false
   readonly blockSync: BlockSyncModuleConfig
   readonly anomalies: AnomaliesConfig | false
-  readonly bridges: { chains: string[]; matchingEnabled: boolean } | false
+  readonly interop: InteropFeatureConfig | false
 
   readonly flags: ResolvedFeatureFlag[]
 }
@@ -158,6 +158,7 @@ export interface HealthConfig {
 }
 
 export interface ActivityConfig {
+  readonly voyagerApiKey: string | undefined
   readonly projects: ActivityConfigProject[]
 }
 
@@ -181,8 +182,14 @@ export interface UpdateMonitorConfig {
   readonly cacheUri: string
   readonly chains: DiscoveryChainConfig[]
   readonly disabledChains: string[]
+  readonly disabledProjects: string[]
   readonly discord: DiscordConfig | false
   readonly updateMessagesRetentionPeriodDays: number
+  readonly workerPool: {
+    readonly workerCount: number
+    readonly timeoutPerTaskMs: number
+    readonly timeoutPerRunMs: number
+  }
 }
 
 export interface VerifiersConfig {
@@ -202,13 +209,36 @@ export interface AnomaliesConfig {
   readonly anomaliesMinDuration: number
 }
 
+export interface InteropFeatureConfig {
+  capture: {
+    enabled: boolean
+    chains: {
+      name: string
+      type: 'evm'
+    }[]
+  }
+  matching: boolean
+  cleaner: boolean
+  dashboard: {
+    enabled: boolean
+    getExplorerUrl: (chain: string) => string | undefined
+  }
+  compare: {
+    enabled: boolean
+  }
+  financials: {
+    enabled: boolean
+  }
+  config: {
+    enabled: boolean
+    chains: { id: number; name: string }[]
+  }
+}
+
 export interface DaBeatConfig {
+  readonly projectsForDaBeatStats: ProjectId[]
   /** Coingecko ids of tokens for economic security */
   readonly coingeckoIds: string[]
-  /** Names of the economic security types */
-  readonly types: string[]
-  readonly quicknodeApiUrl: string
-  readonly quicknodeCallsPerMinute: number
   readonly celestiaApiUrl: string
   readonly celestiaCallsPerMinute: number
   readonly nearRpcUrl: string
@@ -282,5 +312,6 @@ export interface DataAvailabilityTrackingConfig {
 }
 
 export interface BlockSyncModuleConfig {
+  delayFromTipInSeconds: number
   ethereumWsUrl?: string
 }

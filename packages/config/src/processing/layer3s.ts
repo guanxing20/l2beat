@@ -17,6 +17,7 @@ import { degen } from '../projects/degen/degen'
 import { deri } from '../projects/deri/deri'
 import { dodochain } from '../projects/dodochain/dodochain'
 import { donatuz } from '../projects/donatuz/donatuz'
+import { earnm } from '../projects/earnm/earnm'
 import { educhain } from '../projects/educhain/educhain'
 import { ethereal } from '../projects/ethereal/ethereal'
 import { evedex } from '../projects/evedex/evedex'
@@ -32,6 +33,7 @@ import { huddle01 } from '../projects/huddle01/huddle01'
 import { hyperagi } from '../projects/hyperagi/hyperagi'
 import { inevm } from '../projects/inevm/inevm'
 import { intmax } from '../projects/intmax/intmax'
+import { intuition } from '../projects/intuition/intuition'
 import { jetstreamchain } from '../projects/jetstreamchain/jetstreamchain'
 import { l3x } from '../projects/l3x/l3x'
 import { lumiterra } from '../projects/lumiterra/lumiterra'
@@ -88,6 +90,7 @@ export const layer3s: ScalingProject[] = [
   deri,
   dodochain,
   donatuz,
+  earnm,
   educhain,
   ethereal,
   evedex,
@@ -99,6 +102,7 @@ export const layer3s: ScalingProject[] = [
   inevm,
   jetstreamchain,
   intmax,
+  intuition,
   ham,
   henez,
   huddle01,

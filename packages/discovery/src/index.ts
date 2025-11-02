@@ -38,6 +38,10 @@ export {
   makeEntryStructureConfig,
   type StructureContractConfig as ContractConfig,
 } from './discovery/config/structureUtils'
+export {
+  type DiscoveryCounter,
+  SimpleDiscoveryCounter,
+} from './discovery/engine/DiscoveryCounter'
 export { DiscoveryEngine } from './discovery/engine/DiscoveryEngine'
 export { getDiscoveryEngine } from './discovery/getDiscoveryEngine'
 export { HandlerExecutor } from './discovery/handlers/HandlerExecutor'
@@ -68,6 +72,7 @@ export {
 export { neuterErrors } from './discovery/output/errors'
 export { flattenDiscoveredSources } from './discovery/output/flattenDiscoveredSource'
 export { saveDiscoveredJson } from './discovery/output/saveDiscoveryResult'
+export { generateStructureHash } from './discovery/output/structureOutput'
 export {
   combineStructureAndColor,
   toDiscoveryOutput,
@@ -103,6 +108,7 @@ export { SourceCodeService } from './discovery/source/SourceCodeService'
 export { get$Implementations } from './discovery/utils/extractors'
 export { getContractField } from './discovery/utils/metaGetters'
 export { normalizeDiffPath } from './discovery/utils/normalizeDiffPath'
+export { getReachableEntries } from './discovery/utils/reachable'
 export { readJsonc } from './discovery/utils/readJsonc'
 export { sortBySeverity } from './discovery/utils/sortDiffs'
 export { flattenStartingFrom } from './flatten/flatten'

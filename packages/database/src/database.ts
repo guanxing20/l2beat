@@ -7,16 +7,19 @@ import { AggregatedLivenessRepository } from './repositories/AggregatedLivenessR
 import { AnomaliesRepository } from './repositories/AnomaliesRepository'
 import { AnomalyStatsRepository } from './repositories/AnomalyStatsRepository'
 import { BlobsRepository } from './repositories/BlobsRepository'
-import { BridgeEventRepository } from './repositories/BridgeEventRepository'
-import { BridgeMessageRepository } from './repositories/BridgeMessageRepository'
-import { BridgeTransferRepository } from './repositories/BridgeTransferRepository'
 import { CurrentPriceRepository } from './repositories/CurrentPriceRepository'
+import { DaBeatStatsRepository } from './repositories/DaBeatStatsRepository'
 import { DataAvailabilityRepository } from './repositories/DataAvailabilityRepository'
 import { DiscoveryCacheRepository } from './repositories/DiscoveryCacheRepository'
 import { EcosystemTokenRepository } from './repositories/EcosystemTokenRepository'
 import { FlatSourcesRepository } from './repositories/FlatSourcesRepository'
 import { IndexerConfigurationRepository } from './repositories/IndexerConfigurationRepository'
 import { IndexerStateRepository } from './repositories/IndexerStateRepository'
+import { InteropConfigRepository } from './repositories/InteropConfigRepository'
+import { InteropEventRepository } from './repositories/InteropEventRepository'
+import { InteropMessageRepository } from './repositories/InteropMessageRepository'
+import { InteropRecentPricesRepository } from './repositories/InteropRecentPricesRepository'
+import { InteropTransferRepository } from './repositories/InteropTransferRepository'
 import { L2CostPriceRepository } from './repositories/L2CostPriceRepository'
 import { L2CostRepository } from './repositories/L2CostRepository'
 import { LivenessRepository } from './repositories/LivenessRepository'
@@ -24,7 +27,6 @@ import { NotificationsRepository } from './repositories/NotificationsRepository'
 import { ProjectValueRepository } from './repositories/ProjectValueRepository'
 import { RealTimeAnomaliesRepository } from './repositories/RealTimeAnomaliesRepository'
 import { RealTimeLivenessRepository } from './repositories/RealTimeLivenessRepository'
-import { StakeRepository } from './repositories/StakeRepository'
 import { SyncMetadataRepository } from './repositories/SyncMetadataRepository'
 import { TokenMetadataRepository } from './repositories/TokenMetadataRepository'
 import { TokenValueRepository } from './repositories/TokenValueRepository'
@@ -50,15 +52,17 @@ export function createDatabase(config?: PoolConfig & { log?: LogConfig }) {
     activity: new ActivityRepository(db),
     // #endregion
 
-    // #region Bridges
-    bridgeEvent: new BridgeEventRepository(db),
-    bridgeMessage: new BridgeMessageRepository(db),
-    bridgeTransfer: new BridgeTransferRepository(db),
+    // #region Interop
+    interopConfig: new InteropConfigRepository(db),
+    interopEvent: new InteropEventRepository(db),
+    interopMessage: new InteropMessageRepository(db),
+    interopTransfer: new InteropTransferRepository(db),
+    interopRecentPrices: new InteropRecentPricesRepository(db),
     // #endregion
 
     // #region DA BEAT
     currentPrice: new CurrentPriceRepository(db),
-    stake: new StakeRepository(db),
+    daBeatStats: new DaBeatStatsRepository(db),
     dataAvailability: new DataAvailabilityRepository(db),
     blobs: new BlobsRepository(db),
     // #endregion

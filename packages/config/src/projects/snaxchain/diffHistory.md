@@ -1,3 +1,59 @@
+Generated with discovered.json: 0x3c41b23f7e38399df70df4c05d2a34363e513fcc
+
+# Diff at Fri, 03 Oct 2025 08:44:10 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@e647409961cd173771dcfcaeb808991c99e73911 block: 1758699468
+- current timestamp: 1759480976
+
+## Description
+
+Member removed from multisig.
+
+## Watched changes
+
+```diff
+    contract Conduit Multisig 1 (eth:0x4a4962275DF8C60a80d3a25faEc5AA7De116A746) {
+    +++ description: None
+      values.$members.2:
+-        "eth:0x50930d652266EF4127FA3A1906B7Cb9951076628"
+      values.multisigThreshold:
+-        "4 of 11 (36%)"
++        "4 of 10 (40%)"
+    }
+```
+
+Generated with discovered.json: 0xf0f2db2a964656fe999ab689f6c38f81f0837180
+
+# Diff at Wed, 24 Sep 2025 07:38:54 GMT:
+
+- author: Luca Donno (<donnoh99@gmail.com>)
+- comparing to: main@d7323b1d7fcd47448cd95a9f8ee7b4214e04c807 block: 1757661625
+- current timestamp: 1758699468
+
+## Description
+
+system config owner moved from conduit msig to EOA.
+
+## Watched changes
+
+```diff
+    contract Conduit Multisig 1 (eth:0x4a4962275DF8C60a80d3a25faEc5AA7De116A746) {
+    +++ description: None
+      receivedPermissions.2:
+-        {"permission":"interact","from":"eth:0x9c9B78f798F821C2f6398f603825fd175e2427f9","description":"it can update the preconfer address, the batch submitter (Sequencer) address and the gas configuration of the system.","role":".owner"}
+    }
+```
+
+```diff
+    contract SystemConfig (eth:0x9c9B78f798F821C2f6398f603825fd175e2427f9) {
+    +++ description: Contains configuration parameters such as the Sequencer address, gas limit on this chain and the unsafe block signer address.
+      values.owner:
+-        "eth:0x4a4962275DF8C60a80d3a25faEc5AA7De116A746"
++        "eth:0x6cd3f878852769e04A723A5f66CA7DD4d9E38A6C"
+    }
+```
+
 Generated with discovered.json: 0xf24e2c3d074a5cce2692c2e440beb8413d3a85fb
 
 # Diff at Mon, 15 Sep 2025 09:50:51 GMT:

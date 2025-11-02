@@ -1,3 +1,56 @@
+Generated with discovered.json: 0xf4af63cf9bf4f6f76ab4fab6504d649dcee485ac
+
+# Diff at Thu, 02 Oct 2025 12:00:27 GMT:
+
+- author: Michał Podsiadły (<michal.podsiadly@l2beat.com>)
+- comparing to: main@2339b21fd06a7b8f8e031bb84af10cd0096cf422 block: 1758705864
+- current timestamp: 1758705864
+
+## Description
+
+Discovery rerun on the same block number with only config-related changes.
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1758705864 (main branch discovery), not current.
+
+```diff
+    contract SystemConfig (eth:0x427Ea0710FA5252057F0D88274f7aeb308386cAf) {
+    +++ description: Contains configuration parameters such as the Sequencer address, gas limit on this chain and the unsafe block signer address.
+      values.opStackDA.isUsingEigenDA:
+-        true
++        "v1"
+    }
+```
+
+Generated with discovered.json: 0x63eb8f47e46ba88d54d2631e302d439837b30088
+
+# Diff at Wed, 24 Sep 2025 09:25:43 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@057753e0fc174dd2853a04bcf79bde0ce8ba0aa3 block: 1758123938
+- current timestamp: 1758705864
+
+## Description
+
+Execution delay changed from 7 days to 12 hours. It's the same value for optimistic or non-optimistic mode, so when optimistic mode is enabled this parameter should be updated (e.g., back to 7 days).
+
+## Watched changes
+
+```diff
+    contract OPSuccinctL2OutputOracle (eth:0x31d543e7BE1dA6eFDc2206Ef7822879045B9f481) {
+    +++ description: Contains a list of proposed state roots which Proposers assert to be a result of block execution. The SuccinctL2OutputOracle modifies the L2OutputOracle to support whenNotOptimistic mode, in which a validity proof can be passed as input argument to the proposeL2Output function.
+      values.FINALIZATION_PERIOD_SECONDS:
+-        604800
++        43200
+      values.finalizationPeriodSeconds:
+-        604800
++        43200
+    }
+```
+
 Generated with discovered.json: 0xd8173f86001f02e42df9db8016876e69033a10a6
 
 # Diff at Wed, 17 Sep 2025 15:47:02 GMT:

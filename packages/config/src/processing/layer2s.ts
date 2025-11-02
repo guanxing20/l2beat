@@ -1,6 +1,7 @@
 import { HOMEPAGE_MILESTONES } from '../global/milestones'
 import type { ScalingProject } from '../internalTypes'
 import { abstract } from '../projects/abstract/abstract'
+import { adi } from '../projects/adi/adi'
 import { aevo } from '../projects/aevo/aevo'
 import { airas } from '../projects/airas/airas'
 import { alephzero } from '../projects/alephzero/alephzero'
@@ -45,6 +46,7 @@ import { dydx } from '../projects/dydx/dydx'
 import { ebichain } from '../projects/ebichain/ebichain'
 import { eclipse } from '../projects/eclipse/eclipse'
 import { edgeless } from '../projects/edgeless/edgeless'
+import { edgex } from '../projects/edgex/edgex'
 import { ethernity } from '../projects/ethernity/ethernity'
 import { everclear } from '../projects/everclear/everclear'
 import { facet } from '../projects/facet/facet'
@@ -96,6 +98,7 @@ import { layer2financezk } from '../projects/layer2financezk/layer2financezk'
 import { layerai } from '../projects/layerai/layerai'
 import { lens } from '../projects/lens/lens'
 import { liftchain } from '../projects/liftchain/liftchain'
+import { lighter } from '../projects/lighter/lighter'
 import { lightlink } from '../projects/lightlink/lightlink'
 import { linea } from '../projects/linea/linea'
 import { lisk } from '../projects/lisk/lisk'
@@ -145,6 +148,7 @@ import { polygonmiden } from '../projects/polygonmiden/polygonmiden'
 import { polygonzkevm } from '../projects/polygonzkevm/polygonzkevm'
 import { polynomial } from '../projects/polynomial/polynomial'
 import { powerloom } from '../projects/powerloom/powerloom'
+import { primechain } from '../projects/primechain/primechain'
 import { prom } from '../projects/prom/prom'
 import { publicgoodsnetwork } from '../projects/publicgoodsnetwork/publicgoodsnetwork'
 import { puffer } from '../projects/puffer/puffer'
@@ -219,7 +223,6 @@ import { zeronetwork } from '../projects/zeronetwork/zeronetwork'
 import { zircuit } from '../projects/zircuit/zircuit'
 import { zkcandy } from '../projects/zkcandy/zkcandy'
 import { zkfair } from '../projects/zkfair/zkfair'
-import { zklighter } from '../projects/zklighter/zklighter'
 import { zkspace } from '../projects/zkspace/zkspace'
 import { zkswap } from '../projects/zkswap/zkswap'
 import { zkswap2 } from '../projects/zkswap2/zkswap2'
@@ -233,6 +236,7 @@ export const layer2s: ScalingProject[] = [
   airas,
   alephzero,
   alienx,
+  adi,
   allo,
   ancient,
   apex,
@@ -244,6 +248,7 @@ export const layer2s: ScalingProject[] = [
   automata,
   aztecconnect,
   aztec,
+  primechain,
   aztecV2,
   base,
   blast,
@@ -271,6 +276,7 @@ export const layer2s: ScalingProject[] = [
   ebichain,
   eclipse,
   edgeless,
+  edgex,
   ethernity,
   everclear,
   facet,
@@ -323,6 +329,7 @@ export const layer2s: ScalingProject[] = [
   lens,
   liftchain,
   lightlink,
+  lighter,
   linea,
   lisk,
   litecoinvm,
@@ -447,7 +454,6 @@ export const layer2s: ScalingProject[] = [
   zircuit,
   zkcandy,
   zkfair,
-  zklighter,
   zkspace,
   zkswap,
   zkswap2,

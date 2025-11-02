@@ -1,7 +1,7 @@
 {
   "name": "usdy",
   "timestamp": 1752830574,
-  "configHash": "0x990934e0fee768fc27c2830d29d7124d40c78ba4c6004a95d874344e517b9d8c",
+  "configHash": "0x3ed7233d89f52657ea72f5857c3d0576006d7d5610181327bf3d1de013ed01d6",
   "entries": [
     {
       "name": "Ondo U.S. Dollar Yield Token",
@@ -33,7 +33,7 @@
           "decimals": 18,
           "deploymentTimestamp": 1723057357,
           "coingeckoListingTimestamp": 1699401600,
-          "category": "other",
+          "category": "rwaPublic",
           "iconUrl": "https://coin-images.coingecko.com/coins/images/31700/large/usdy_%281%29.png?1696530524",
           "chainId": 42161,
           "supply": "totalSupply",

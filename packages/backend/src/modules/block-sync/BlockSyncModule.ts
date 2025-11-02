@@ -42,6 +42,7 @@ export function createBlockSyncModule({
             providers.block.getBlockProvider(chain),
             chain,
             logger,
+            config.blockSync.delayFromTipInSeconds,
           )
 
     const blockIndexer = new BlockIndexer({
@@ -50,7 +51,6 @@ export function createBlockSyncModule({
       parents: [blockNumberIndexer],
       blockProcessors: blockProcessors.filter((x) => x.chain === chain),
       source: chain,
-      mode: 'CONTINUOUS',
       blockProvider: providers.block.getBlockProvider(chain),
       logsProvider: providers.logs.getLogsProvider(chain),
       indexerService,
@@ -68,7 +68,7 @@ export function createBlockSyncModule({
 
     const stats = await db.stats()
     for (const stat of stats) {
-      logger.metric('Database table size', {
+      logger.info('Database table size', {
         table: stat.tableName,
         sizeInBytes: stat.sizeInBytes,
       })

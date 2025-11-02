@@ -145,6 +145,18 @@ export const badges = [
       value: 'Zeeve',
     },
   },
+  {
+    id: 'Nodeinfra',
+    type: BadgeType.RaaS,
+    name: 'Nodeinfra',
+    description:
+      'This project was deployed via the rollup-as-a-service provider Nodeinfra',
+    action: {
+      type: 'scalingFilter',
+      id: 'raas',
+      value: 'Nodeinfra',
+    },
+  },
   // DA
   {
     id: 'Avail',
@@ -709,6 +721,27 @@ export const badges = [
       type: 'scalingFilter',
       id: 'other',
       value: 'Shared Bridge',
+    },
+  },
+  {
+    id: 'Espresso',
+    type: BadgeType.DA,
+    name: 'Espresso',
+    description: 'This project is posting its data to Espresso',
+    action: {
+      type: 'publicDaHighlight',
+      slug: 'espresso',
+    },
+  },
+  {
+    id: 'EspressoHotShotLightClient',
+    type: BadgeType.DA,
+    name: 'Espresso with HotShot Light Client',
+    description:
+      'This project utilizes Espresso and has HotShot Light Client enabled, facilitating the bridging of data availability attestations between Espresso and Ethereum.',
+    action: {
+      type: 'publicDaHighlight',
+      slug: 'espresso',
     },
   },
 ] as const satisfies Badge[]

@@ -1,3 +1,91 @@
+Generated with discovered.json: 0xe8a0de42ecea568478643af5de21834d1b89290c
+
+# Diff at Mon, 20 Oct 2025 15:26:52 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@bfe80e92f67656ee716f7ab40cc8f3f9e92dc7d6 block: 1758795850
+- current timestamp: 1760973938
+
+## Description
+
+New staker.
+
+## Watched changes
+
+```diff
+    contract L1Staking (eth:0x0Dc417F8AF88388737c5053FF73f345f080543F7) {
+    +++ description: Contract keeping track of stakers which act as sequencers/proposes. It is responsible for stakers registering and withdrawals and for verifying BLS signatures of stakers (currently not implemented).
+      values.getActiveStakers.3:
++        "eth:0x76F91869161dC4348230D5F60883Dd17462035f4"
+    }
+```
+
+Generated with discovered.json: 0xd9fb1807158ea919c9a3fa8989e2cdcc89960134
+
+# Diff at Thu, 25 Sep 2025 10:25:13 GMT:
+
+- author: Sergey Shemyakov (<sergey.shemyakov@l2beat.com>)
+- comparing to: main@08eb3e2b6dafb4d1e7d4a8e779cd4e303c71568e block: 1758621561
+- current timestamp: 1758795850
+
+## Description
+
+Removed 5 members of multisig, added 2 new members that were a part of another multisig.
+
+## Watched changes
+
+```diff
+    contract Morph Multisig 2 (eth:0xB822319ab7848b7cC4537c8409e50f85BFb04377) {
+    +++ description: None
+      values.$members.0:
+-        "eth:0x19C0CebaEC6EDb61c00178Cf8c6112BAD5Ef68E6"
+      values.$members.1:
+-        "eth:0xa79fEE4418338B59B8C6c93b87777A89F57c0Fd3"
+      values.$members.2:
+-        "eth:0x429087D7cb89cD816b80804bCE9c7b1A1FFE229F"
++        "eth:0xC7F81B58ec3937D11Bf4BA74C04FF69e944423F2"
+      values.$members.3:
+-        "eth:0x0659dF9D53A987e3aDaa9019407431413A101eF3"
++        "eth:0xbA430e784fe11ADbc20fa1a99193eeD87ACD68C7"
+      values.$members.6:
+-        "eth:0xAD249861A911717fE74FA329fEC3c619f55DfFDf"
+      values.$threshold:
+-        5
++        3
+      values.multisigThreshold:
+-        "5 of 8 (63%)"
++        "3 of 5 (60%)"
+    }
+```
+
+Generated with discovered.json: 0xed34c197a104a6366dbeac0f6ff4d78762a6f299
+
+# Diff at Tue, 23 Sep 2025 10:00:23 GMT:
+
+- author: Sergey Shemyakov (<sergey.shemyakov@l2beat.com>)
+- comparing to: main@b6e19f60c69fa605df017b3852b7ffb8d92b60cf block: 1758269993
+- current timestamp: 1758621561
+
+## Description
+
+Multisig update, new signer was already a member of Multisig 2.
+
+## Watched changes
+
+```diff
+    contract Morph Multisig 1 (eth:0xF101f7f59A348c1F971A2BC64fdBdA58c7bBD887) {
+    +++ description: None
+      values.$members.0:
++        "eth:0x05e1d4694041aF987Af6F8402D902686018E2136"
+      values.$threshold:
+-        3
++        4
+      values.multisigThreshold:
+-        "3 of 5 (60%)"
++        "4 of 6 (67%)"
+    }
+```
+
 Generated with discovered.json: 0xdf7f5d9659cc3b737f86d2e4c41221b19ffdc9ec
 
 # Diff at Fri, 19 Sep 2025 08:20:56 GMT:

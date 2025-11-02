@@ -12,7 +12,7 @@ import { polygonCDKStack } from '../../templates/polygonCDKStack'
 import { PolygoncdkDAC } from '../../templates/polygoncdk-template'
 
 const discovery = new ProjectDiscovery('silicon')
-const bridge = discovery.getContract('PolygonSharedBridge')
+const bridge = discovery.getContract('AgglayerBridge')
 
 const membersCountDAC = discovery.getContractValue<number>(
   'PolygonDataCommittee',
@@ -32,7 +32,7 @@ const rollupModuleContract = discovery.getContract('Validium')
 
 export const silicon: ScalingProject = polygonCDKStack({
   addedAt: UnixTime(1725027256), // 2024-08-30T14:14:16Z
-  additionalBadges: [BADGES.DA.DAC],
+  additionalBadges: [BADGES.DA.DAC, BADGES.RaaS.Nodeinfra],
   discovery,
   reasonsForBeingOther: [REASON_FOR_BEING_OTHER.SMALL_DAC],
   display: {
@@ -88,7 +88,7 @@ export const silicon: ScalingProject = polygonCDKStack({
     explorerUrl: 'https://scope.silicon.network',
     sinceTimestamp: UnixTime(1724183531),
     apis: [
-      { type: 'rpc', url: 'https://rpc.silicon.network', callsPerMinute: 1500 },
+      { type: 'rpc', url: 'https://rpc.silicon.network', callsPerMinute: 300 },
     ],
   },
   nonTemplateEscrows: [

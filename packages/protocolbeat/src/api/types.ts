@@ -65,6 +65,15 @@ export type ApiCreateShapeResponse =
       error: string
     }
 
+export type ApiCreateConfigFileResponse =
+  | {
+      success: true
+    }
+  | {
+      success: false
+      error: string
+    }
+
 export type ApiAddressType =
   | 'EOA'
   | 'EOAPermissioned'
@@ -73,6 +82,7 @@ export type ApiAddressType =
   | 'Multisig'
   | 'Diamond'
   | 'Timelock'
+  | 'Untemplatized'
   | 'Contract'
   | 'Unknown'
 
@@ -84,6 +94,7 @@ export interface ApiAddressEntry {
   referencedBy: ApiAddressReference[]
   address: string
   chain: string
+  isReachable: boolean
 }
 
 export interface ApiAddressReference extends AddressFieldValue {

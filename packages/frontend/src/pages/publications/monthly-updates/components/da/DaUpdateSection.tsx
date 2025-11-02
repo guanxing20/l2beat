@@ -21,7 +21,6 @@ export function DaUpdateSection({ daLayer, from, to }: Props) {
     >
       <div className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-2">
         <MonthlyUpdateTvsChart
-          id={daLayer.id}
           type="daLayer"
           entries={daLayer.daProjects}
           allScalingProjectsTvs={daLayer.allProjects.tvs}
@@ -29,7 +28,7 @@ export function DaUpdateSection({ daLayer, from, to }: Props) {
           to={to}
         />
         <MonthlyUpdateThroughputChart
-          id={daLayer.id}
+          id={daLayer.daLayerId}
           dataPosted={daLayer.allProjects.dataPosted}
           pastDayPosted={daLayer.pastDayPosted}
           from={from}

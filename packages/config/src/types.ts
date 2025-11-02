@@ -91,7 +91,7 @@ export interface BaseProject {
   scalingInfo?: ProjectScalingInfo
   scalingStage?: ProjectScalingStage
   scalingRisks?: ProjectScalingRisks
-  scalingDa?: ProjectScalingDa
+  scalingDa?: ProjectScalingDa[]
   scalingTechnology?: ProjectScalingTechnology
 
   // da data
@@ -127,7 +127,6 @@ export interface BaseProject {
   isDaLayer?: true
   isUpcoming?: true
   archivedAt?: UnixTime
-  hasActivity?: true
   hasTestnet?: true
 }
 
@@ -353,7 +352,7 @@ export interface ProjectScalingInfo {
   raas: string | undefined
   infrastructure: string | undefined
   vm: string[]
-  daLayer: string | undefined
+  daLayer: string[] | undefined
   stage: ProjectStageName
   purposes: ProjectScalingPurpose[]
   scopeOfAssessment: ProjectScalingScopeOfAssessment | undefined
@@ -390,6 +389,8 @@ export interface ReasonForBeingInOther {
   label: string
   shortDescription: string
   description: string
+  /** A few words explaining why we added this reason for being other. It is showed in `Why is the project listed in others?` section */
+  explanation?: string
 }
 
 export type ProjectScalingStack =
@@ -528,7 +529,7 @@ export interface ProjectScalingTechnology {
   warning?: string
   detailedDescription?: string
   architectureImage?: string
-  dataAvailability?: ProjectTechnologyChoice
+  dataAvailability?: ProjectTechnologyChoice[]
   operator?: ProjectTechnologyChoice
   sequencing?: ProjectTechnologyChoice
   sequencingImage?: string
@@ -579,6 +580,16 @@ export interface ProjectScalingStateValidationCategory {
   references?: ReferenceLink[]
   isIncomplete?: boolean
 }
+
+export interface ProjectScalingContractsZkProgramHash {
+  hash: string
+  proverSystemProject?: ProjectId
+  title: string
+  description?: string
+  programUrl?: string
+  verificationStatus: 'successful' | 'unsuccessful' | 'notVerified'
+  verificationSteps?: string
+}
 // #endregion
 
 // #region da data
@@ -599,6 +610,8 @@ export interface ProjectDaLayer {
   finality?: number
   dataAvailabilitySampling?: DataAvailabilitySampling
   economicSecurity?: DaEconomicSecurity
+  /** Config for getting the number of validators. Type: `static` means the number is fixed. Type: `dynamic` means we need to fetch it (has to be implemented in BE). */
+  validators?: DaValidators
   sovereignProjectsTrackingConfig?: SovereignProjectDaTrackingConfig[]
 }
 
@@ -666,13 +679,21 @@ export interface DataAvailabilitySampling {
 }
 
 export interface DaEconomicSecurity {
-  name: string
   token: {
     symbol: string
     decimals: number
     coingeckoId: string
   }
 }
+
+export type DaValidators =
+  | {
+      type: 'static'
+      count: number
+    }
+  | {
+      type: 'dynamic'
+    }
 
 export interface ProjectDaBridge {
   name: string
@@ -681,7 +702,7 @@ export interface ProjectDaBridge {
   risks: DaBridgeRisks
   usedIn: UsedInProject[]
   dac?: DacInfo
-  relayerType?: TableReadyValue<'Permissioned'>
+  relayerType?: TableReadyValue<'Permissioned' | 'SelfRelay'>
   validationType?: DaBridgeValidationType
 }
 
@@ -894,7 +915,10 @@ export type AdjustCount =
 export interface DayActivityConfig {
   type: 'day'
   sinceTimestamp: UnixTime
+  /** Source of the data, will be displayed in the UI */
+  dataSource: string
   resyncLastDays?: number
+  batchSize?: number
 }
 
 export interface ProjectLivenessInfo {
@@ -1015,6 +1039,7 @@ export interface ProjectPermissions {
 }
 
 export interface ProjectPermission {
+  id: string
   /** List of the accounts */
   accounts: ProjectPermissionedAccount[]
   /** Name of this group */
@@ -1045,6 +1070,7 @@ export interface ProjectContracts {
   /** List of risks associated with the contracts */
   risks: ProjectRisk[]
   escrows?: ProjectEscrow[]
+  zkProgramHashes?: ProjectScalingContractsZkProgramHash[]
 }
 
 export interface ProjectContract {
@@ -1073,6 +1099,12 @@ export interface ProjectContract {
     /** Who can pause/unpause the contract */
     pausableBy: string[]
   }
+  /** List of past upgrades */
+  pastUpgrades?: {
+    timestamp: UnixTime
+    transactionHash: string
+    implementations: ChainSpecificAddress[]
+  }[]
   /** List of references */
   references?: ReferenceLink[]
   /** Indicates whether the generation of contained data was driven by discovery */
@@ -1087,6 +1119,8 @@ export interface ProjectContractUpgradeability {
 }
 
 export interface ProjectUpgradeableActor {
+  /** Id of the actor */
+  id?: string
   /** Actor from permissions that can upgrade */
   name: string
   /** Upgrade delay. Can be simple "21 days" or more complex "8 days shortened to 0 by security council" */

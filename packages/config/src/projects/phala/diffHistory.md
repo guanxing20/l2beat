@@ -1,3 +1,63 @@
+Generated with discovered.json: 0x16757f066a763de352acd9b8d27775aa1e878535
+
+# Diff at Fri, 03 Oct 2025 08:43:19 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@e647409961cd173771dcfcaeb808991c99e73911 block: 1758309851
+- current timestamp: 1759480929
+
+## Description
+
+Member removed from multisig.
+
+## Watched changes
+
+```diff
+    contract Conduit Multisig 1 (eth:0x4a4962275DF8C60a80d3a25faEc5AA7De116A746) {
+    +++ description: None
+      values.$members.2:
+-        "eth:0x50930d652266EF4127FA3A1906B7Cb9951076628"
+      values.multisigThreshold:
+-        "4 of 11 (36%)"
++        "4 of 10 (40%)"
+    }
+```
+
+Generated with discovered.json: 0x007905302f95c2c7863e794c55ce0b0ed31d9691
+
+# Diff at Fri, 19 Sep 2025 19:25:25 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@3aa102df1ae0b60ff981cfe12b1d0c919b4c2704 block: 1757924713
+- current timestamp: 1758309851
+
+## Description
+
+Added proposer permission.
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1757924713 (main branch discovery), not current.
+
+```diff
+    contract OPSuccinctL2OutputOracle (eth:0xb45440830bd8D288bB2B5B01Be303ae60fc855d8) {
+    +++ description: Contains a list of proposed state roots which Proposers assert to be a result of block execution. The SuccinctL2OutputOracle modifies the L2OutputOracle to support whenNotOptimistic mode, in which a validity proof can be passed as input argument to the proposeL2Output function.
+      template:
+-        "succinct/OPSuccinct/OPSuccinctL2OutputOracle"
++        "succinct/OPSuccinct/OPSuccinctL2OutputOracle_phala"
+    }
+```
+
+```diff
+    EOA  (eth:0xF579A1cDfb89D0Aaf240d489EF10aB01A2B7f8F2) {
+    +++ description: None
+      receivedPermissions:
++        [{"permission":"propose","from":"eth:0xb45440830bd8D288bB2B5B01Be303ae60fc855d8","role":".proposer"}]
+    }
+```
+
 Generated with discovered.json: 0x0df4853f4f265f12ac5db5a7a58c529fb8c37c95
 
 # Diff at Mon, 15 Sep 2025 08:38:13 GMT:

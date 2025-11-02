@@ -41,6 +41,7 @@ describe(RpcClient.name, () => {
         timestamp: 100,
         hash: '0xabcdef',
         number: 100,
+        logsBloom: `0x${'0'.repeat(512)}`,
         //@ts-expect-error type issue
         parentBeaconBlockRoot: '0x123',
       })
@@ -66,6 +67,7 @@ describe(RpcClient.name, () => {
       expect(result).toEqual({
         timestamp: 100,
         hash: '0xabcdef',
+        logsBloom: `0x${'0'.repeat(512)}`,
         number: 100,
         parentBeaconBlockRoot: '0x123',
       })
@@ -165,6 +167,7 @@ describe(RpcClient.name, () => {
               address: mockAddresses[0],
               topics: mockTopics,
               blockNumber: `0x${mockFromBlock.toString(16)}`,
+              blockHash: `0x${'0'.repeat(64)}`,
               transactionHash:
                 '0x4c2480937b375524bc27d0068c82a47d3e4c086fb12d2b3c0ac2222042d0e596',
               data: '0xdata',
@@ -187,6 +190,7 @@ describe(RpcClient.name, () => {
           address: mockAddresses[0],
           topics: mockTopics,
           blockNumber: mockFromBlock,
+          blockHash: `0x${'0'.repeat(64)}`,
           transactionHash:
             '0x4c2480937b375524bc27d0068c82a47d3e4c086fb12d2b3c0ac2222042d0e596',
           data: '0xdata',
@@ -233,6 +237,7 @@ describe(RpcClient.name, () => {
                 address: mockAddresses[0],
                 topics: mockTopics,
                 blockNumber: `0x${mockFromBlock.toString(16)}`,
+                blockHash: `0x${'0'.repeat(64)}`,
                 transactionHash:
                   '0x4c2480937b375524bc27d0068c82a47d3e4c086fb12d2b3c0ac2222042d0e596',
                 data: '0xdata',
@@ -246,6 +251,7 @@ describe(RpcClient.name, () => {
                 address: mockAddresses[1],
                 topics: mockTopics,
                 blockNumber: `0x${mockFromBlock.toString(16)}`,
+                blockHash: `0x${'0'.repeat(64)}`,
                 transactionHash:
                   '0x4c2480937b375524bc27d0068c82a47d3e4c086fb12d2b3c0ac2222042d0e596',
                 data: '0xdata',
@@ -316,6 +322,7 @@ describe(RpcClient.name, () => {
           address: mockAddresses[0],
           topics: mockTopics,
           blockNumber: mockFromBlock,
+          blockHash: `0x${'0'.repeat(64)}`,
           transactionHash:
             '0x4c2480937b375524bc27d0068c82a47d3e4c086fb12d2b3c0ac2222042d0e596',
           data: '0xdata',
@@ -325,6 +332,7 @@ describe(RpcClient.name, () => {
           address: mockAddresses[1],
           topics: mockTopics,
           blockNumber: mockFromBlock,
+          blockHash: `0x${'0'.repeat(64)}`,
           transactionHash:
             '0x4c2480937b375524bc27d0068c82a47d3e4c086fb12d2b3c0ac2222042d0e596',
           data: '0xdata',
@@ -467,7 +475,7 @@ describe(RpcClient.name, () => {
       )
 
       const rpc = new RpcClient({
-        sourceName: 'chain',
+        chain: 'chain',
         url: 'API_URL',
         http: mockObject<HttpClient>({}),
         callsPerMinute: 100_000,
@@ -488,7 +496,7 @@ describe(RpcClient.name, () => {
       )
 
       const rpc = new RpcClient({
-        sourceName: 'chain',
+        chain: 'chain',
         url: 'API_URL',
         http: mockObject<HttpClient>({}),
         callsPerMinute: 100_000,
@@ -502,7 +510,7 @@ describe(RpcClient.name, () => {
 
     it('returns false when multicall client is not configured', () => {
       const rpc = new RpcClient({
-        sourceName: 'chain',
+        chain: 'chain',
         url: 'API_URL',
         http: mockObject<HttpClient>({}),
         callsPerMinute: 100_000,
@@ -517,7 +525,7 @@ describe(RpcClient.name, () => {
   describe(RpcClient.prototype.multicall.name, () => {
     it('throws error when multicall client is not configured', async () => {
       const rpc = new RpcClient({
-        sourceName: 'chain',
+        chain: 'chain',
         url: 'API_URL',
         http: mockObject<HttpClient>({}),
         callsPerMinute: 100_000,
@@ -545,7 +553,7 @@ describe(RpcClient.name, () => {
       )
 
       const rpc = new RpcClient({
-        sourceName: 'chain',
+        chain: 'chain',
         url: 'API_URL',
         http: mockObject<HttpClient>({}),
         callsPerMinute: 100_000,
@@ -601,7 +609,7 @@ describe(RpcClient.name, () => {
       })
 
       const rpc = new RpcClient({
-        sourceName: 'chain',
+        chain: 'chain',
         url: 'API_URL',
         http,
         callsPerMinute: 100_000,
@@ -850,7 +858,7 @@ function mockClient(deps: {
   generateId?: () => string
 }) {
   return new RpcClient({
-    sourceName: 'chain',
+    chain: 'chain',
     url: deps.url ?? 'API_URL',
     http: deps.http ?? mockObject<HttpClient>({}),
     callsPerMinute: 100_000,
@@ -865,6 +873,7 @@ const mockResponse = (blockNumber: number) => ({
     transactions: [mockRawTx('0'), mockRawTx(undefined)],
     timestamp: `0x${blockNumber.toString(16)}`,
     hash: '0xabcdef',
+    logsBloom: `0x${'0'.repeat(512)}`,
     number: `0x${blockNumber.toString(16)}`,
     parentBeaconBlockRoot: '0x123',
   },
@@ -872,6 +881,7 @@ const mockResponse = (blockNumber: number) => ({
 
 const mockRawTx = (to: string | undefined) => ({
   hash: '0x1',
+  value: 11111111n.toString(),
   from: '0xf',
   to,
   input: '0x1',
@@ -882,6 +892,7 @@ const mockRawTx = (to: string | undefined) => ({
 
 const mockTx = (to: string | undefined) => ({
   hash: '0x1',
+  value: 11111111n,
   from: '0xf',
   to,
   data: '0x1',

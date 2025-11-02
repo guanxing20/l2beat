@@ -402,7 +402,7 @@ App-specific data can be reconstructed by app clients, which request and assembl
       },
       {
         projectId: ProjectId('527d69c3'),
-        name: '527d69c3',
+        name: 'Rooch Network',
         daTrackingConfig: [
           {
             type: 'avail',
@@ -543,12 +543,14 @@ App-specific data can be reconstructed by app clients, which request and assembl
       fraudDetection: DaFraudDetectionRisk.DasWithNoBlobsReconstruction(true),
     },
     economicSecurity: {
-      name: 'Avail',
       token: {
         symbol: 'AVAIL',
         decimals: 18,
         coingeckoId: 'avail',
       },
+    },
+    validators: {
+      type: 'dynamic',
     },
   },
 

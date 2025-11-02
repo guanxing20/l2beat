@@ -11,7 +11,7 @@ import {
   ClientCore,
   type ClientCoreDependencies as ClientCoreDependencies,
 } from '../ClientCore'
-import type { BlockClient } from '../types'
+import type { BlockClient, LogsClient } from '../types'
 import type { MulticallV3Client } from './multicall/MulticallV3Client'
 import {
   type CallParameters,
@@ -30,8 +30,9 @@ import {
   RpcResponse,
 } from './types'
 
-interface Dependencies extends ClientCoreDependencies {
+interface Dependencies extends Omit<ClientCoreDependencies, 'sourceName'> {
   url: string
+  chain: string
   generateId?: () => string
   multicallClient?: MulticallV3Client
 }
@@ -42,11 +43,11 @@ type Param =
   | boolean
   | Record<string, string | string[] | string[][]>
 
-export class RpcClient extends ClientCore implements BlockClient {
+export class RpcClient extends ClientCore implements BlockClient, LogsClient {
   multicallClient?: MulticallV3Client
 
   constructor(private readonly $: Dependencies) {
-    super($)
+    super({ ...$, sourceName: $.chain })
     this.multicallClient = $.multicallClient
   }
 
@@ -347,7 +348,7 @@ export class RpcClient extends ClientCore implements BlockClient {
   }
 
   get chain() {
-    return this.$.sourceName
+    return this.$.chain
   }
 }
 

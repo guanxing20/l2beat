@@ -7,6 +7,7 @@ on:
 jobs:
   forbid-mixed-changes:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: read
@@ -20,9 +21,11 @@ jobs:
             migrations:
               - 'packages/database/prisma/migrations/**'
             code:
-              - 'packages/**/*.ts'
-              - 'packages/**/*.js'
-              - 'packages/**/package.json'
+              - 'packages/!(database)/**/*.ts'
+              - 'packages/!(database)/*.ts'
+              - 'packages/!(database)/**/*.js'
+              - 'packages/!(database)/*.js'
+              - 'packages/!(database)/package.json'
               - 'package.json'
               - 'pnpm-*.yaml'
 

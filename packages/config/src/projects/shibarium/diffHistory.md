@@ -1,3 +1,204 @@
+Generated with discovered.json: 0x20d82b00a2a06e6877637412a4d82c2c341c0916
+
+# Diff at Wed, 15 Oct 2025 14:11:53 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@3b2c8898ebe0c61228f50617e2de65973094dd39 block: 1759763659
+- current timestamp: 1760536727
+
+## Description
+
+WithdrawalManager upgrade with support for blacklisting.
+
+## Watched changes
+
+```diff
+    contract WithdrawalManager (eth:0x5F683665ca87dbC3D1358913da80e3C71c328Fb0) {
+    +++ description: Contract handling users’ withdrawal finalization for tokens escrowed in DepositManager. It has blacklisting support.
+      template:
+-        "polygonposbridge/WithdrawManager"
++        "shibarium/WithdrawManager"
+      sourceHashes.1:
+-        "0xda0990aeeb22bcf3c867d4f398d00bd7d2f15aef3add8c60800711185b34a09c"
++        "0xcdde166e8888dfe4fae172f6008fe3fbc0bcb1db2e5be1ca6519f3eff028ba7b"
+      description:
+-        "Contract handling users’ withdrawal finalization for tokens escrowed in DepositManager."
++        "Contract handling users’ withdrawal finalization for tokens escrowed in DepositManager. It has blacklisting support."
+      values.$implementation:
+-        "eth:0xA5E0bD9dc1F1d55e53ca87496731aE6B768094D3"
++        "eth:0xD12B1d5f28736cE0Bfd9330F5595d3fFE6e01A97"
+      values.HALF_EXIT_PERIOD:
+-        864000
++        302400
+      values.implementation:
+-        "eth:0xA5E0bD9dc1F1d55e53ca87496731aE6B768094D3"
++        "eth:0xD12B1d5f28736cE0Bfd9330F5595d3fFE6e01A97"
+      implementationNames.eth:0xA5E0bD9dc1F1d55e53ca87496731aE6B768094D3:
+-        "WithdrawManager"
+      implementationNames.eth:0xD12B1d5f28736cE0Bfd9330F5595d3fFE6e01A97:
++        "WithdrawManager"
+    }
+```
+
+```diff
+    EOA  (eth:0xBab4F3e701F6d2e009Af3C7f1eF2e7dD68225E96) {
+    +++ description: None
+      receivedPermissions.4:
++        {"permission":"interact","from":"eth:0x5F683665ca87dbC3D1358913da80e3C71c328Fb0","description":"manage critical config values like the exit period and the blacklist.","role":".owner"}
+    }
+```
+
+## Source code changes
+
+```diff
+.../WithdrawalManager/WithdrawManager.sol          | 67 +++++++++++++++++++---
+ 1 file changed, 59 insertions(+), 8 deletions(-)
+```
+
+Generated with discovered.json: 0x6f9ba0ab84c084ca12fcde474716e18e54bfddc5
+
+# Diff at Mon, 06 Oct 2025 15:21:58 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@e58bd9f0913161b35e2a2c65f233464591d4f28b block: 1758802197
+- current timestamp: 1759763659
+
+## Description
+
+AccountStateRoot change.
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1758802197 (main branch discovery), not current.
+
+```diff
+    contract StakingInfo (eth:0x539964b3d225194717fb896D26c8b3E635b8A1aE) {
+    +++ description: Contains logging and getter functions about staking.
+      fieldMeta:
++        {"getAccountStateRoot":{"description":"Merkle root of a tree of validator balances."}}
+    }
+```
+
+Generated with discovered.json: 0xa1d125af6e4cf4ade4902c1381c65681e339fa12
+
+# Diff at Thu, 25 Sep 2025 12:24:27 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@0baa1255a33ce1a02b431265f21e07fd28f2de49 block: 1757911207
+- current timestamp: 1758802197
+
+## Description
+
+stakeManager upgrade. here is the diff to the non-reverting stakeManager before the hack: https://disco.l2beat.com/diff/eth:0x1be79AED4088A55f5ED249a14f777758d9F888c6/eth:0x269C0ebb7a39995dB531Ccd61D015e431530b87A
+
+the main addition is the blacklist. the reverts from the interim implementation have been removed.
+
+## Watched changes
+
+```diff
+    contract StakeManager (eth:0x65218A41Fb92637254B4f8c97448d3dF343A3064) {
+    +++ description: Main configuration contract to manage stakers and their voting power and validate checkpoint signatures. After the shibarium hack, this contract also includes a validator blacklist managed by eth:0xC476E20c2F7FA3B35aC242aBE71B59e902242f06.
+      template:
+-        "polygonposbridge/StakeManager_shibarium_revert"
++        "polygonposbridge/StakeManager_shibarium"
+      sourceHashes.1:
+-        "0x9394ab61559718a01471ac508777c2be71a11c31bd14a7c7b5dc14ee61efbd3b"
++        "0xe2522e34d47444e7e217e066534ccc56536e24f4f582f8585897230965360291"
+      description:
+-        "Main configuration contract to manage stakers and their voting power and validate checkpoint signatures. This version of the contract has most critical validator management functions blocked (`transferFunds`, `unstakeClaim`, `withdrawDelegatorsReward`, `_transferToken`, `_transferTokenFrom`) and 'rescue' functions added after the shibarium hack."
++        "Main configuration contract to manage stakers and their voting power and validate checkpoint signatures. After the shibarium hack, this contract also includes a validator blacklist managed by eth:0xC476E20c2F7FA3B35aC242aBE71B59e902242f06."
+      values.$implementation:
+-        "eth:0x94e5C17983cf1631e7135C33CF0e6206FF995207"
++        "eth:0x269C0ebb7a39995dB531Ccd61D015e431530b87A"
+      values.$pastUpgrades.5:
++        ["2025-09-24T19:46:35.000Z","0xa214ba95a5640e38fdbae0e1e9fb12b38fea89906efa333f37ae2f65d56bfd7c",["eth:0x269C0ebb7a39995dB531Ccd61D015e431530b87A"]]
+      values.$upgradeCount:
+-        5
++        6
+      values.auctionPeriod:
+-        0
++        7
+      values.dynasty:
+-        1
++        30
+      values.implementation:
+-        "eth:0x94e5C17983cf1631e7135C33CF0e6206FF995207"
++        "eth:0x269C0ebb7a39995dB531Ccd61D015e431530b87A"
+      values.replacementCoolDown:
+-        13608
++        29342
+      values.rescuer:
+-        "eth:0xBab4F3e701F6d2e009Af3C7f1eF2e7dD68225E96"
+      values.WITHDRAWAL_DELAY:
+-        1
++        30
+      values.withdrawalDelay:
+-        1
++        30
+      implementationNames.eth:0x94e5C17983cf1631e7135C33CF0e6206FF995207:
+-        "StakeManager"
+      implementationNames.eth:0x269C0ebb7a39995dB531Ccd61D015e431530b87A:
++        "StakeManager"
+    }
+```
+
+```diff
+    EOA  (eth:0xBab4F3e701F6d2e009Af3C7f1eF2e7dD68225E96) {
+    +++ description: None
+      receivedPermissions.4.via:
++        [{"address":"eth:0xC476E20c2F7FA3B35aC242aBE71B59e902242f06"}]
+      receivedPermissions.4.role:
+-        ".rescuer"
++        ".governance"
+      receivedPermissions.4.description:
+-        "can move any ERC20 tokens out of the contract."
++        "can manage the validator blacklist and change other critical settings related to staking."
+      receivedPermissions.5.description:
+-        "can replace all validators."
++        "can replace all validators and change the root chain address."
+    }
+```
+
+```diff
+    contract Governance (eth:0xC476E20c2F7FA3B35aC242aBE71B59e902242f06) {
+    +++ description: Simple contract that allows the owner to call an `update` function on arbitrary contracts.
+      directlyReceivedPermissions:
++        [{"permission":"interact","from":"eth:0x65218A41Fb92637254B4f8c97448d3dF343A3064","description":"can manage the validator blacklist and change other critical settings related to staking.","role":".governance"}]
+    }
+```
+
+```diff
+    contract Registry (eth:0xF486e3B6A432Bdd6EDaAe85a565CD7682A7862BB) {
+    +++ description: Maintains the addresses of the contracts used in the system.
+      values.getValidatorShareAddress:
+-        "eth:0xe99f1001c8afD34AcF0CEd6aD33137DeE8D81dE6"
++        "eth:0xaB8FB5E1A9777f2A98E86004980A4fCdcd655a04"
+    }
+```
+
+## Source code changes
+
+```diff
+.../StakeManager/StakeManager.sol                  | 612 ++++++---------------
+ 1 file changed, 179 insertions(+), 433 deletions(-)
+```
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1757911207 (main branch discovery), not current.
+
+```diff
+    EOA  (eth:0xBab4F3e701F6d2e009Af3C7f1eF2e7dD68225E96) {
+    +++ description: None
+      directlyReceivedPermissions:
++        [{"permission":"act","from":"eth:0xC476E20c2F7FA3B35aC242aBE71B59e902242f06","role":".owner"}]
+    }
+```
+
 Generated with discovered.json: 0x39091287b079e101e36e1e36c984b610497bbeb1
 
 # Diff at Mon, 15 Sep 2025 11:00:30 GMT:

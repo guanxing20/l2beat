@@ -1,3 +1,190 @@
+Generated with discovered.json: 0xe00b4ada8cc2790f86aeb20257b517cb0b2abb13
+
+# Diff at Mon, 20 Oct 2025 15:58:09 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@bfe80e92f67656ee716f7ab40cc8f3f9e92dc7d6 block: 1760089813
+- current timestamp: 1760975747
+
+## Description
+
+Upgrade to unverified Bridge contract. Project already archived.
+
+## Watched changes
+
+```diff
+    contract ProxyAdmin (arb1:0x490C4c92Ea9FF02EE8277222C66afD80Bfb1b7c1) {
+    +++ description: None
+      directlyReceivedPermissions.2:
+-        {"permission":"upgrade","from":"arb1:0x6e988B94C12194A925D7802FE75891364C312477","role":"admin"}
+    }
+```
+
+```diff
+    contract Bridge (arb1:0x53D82686BC9827fEc03bcEe661B37b855A18EcA9) {
+    +++ description: None
+      template:
+-        "orbitstack/Bridge"
+      sourceHashes:
+-        ["0xa7e3f6c355703ed46fcb2156862c4f01792b87beb10a87a81ce3bd5beee79b67","0xb920455f1e366c7a89719abdd8d8174e4e7d353f2d4b7dea11b0571bf9526eae"]
+      description:
+-        "Escrow contract for the project's gas token (can be different from ETH). Keeps a list of allowed Inboxes and Outboxes for canonical bridge messaging."
+      values.$implementation:
+-        "arb1:0xB23214f241bdEb275f7dCBfbb1EA79349101d4B0"
++        "arb1:0x866CF7AE3d44dC5f7Dd3d4B36e8467F18fd2B9F2"
+      values.$pastUpgrades.1:
++        ["2025-10-17T18:51:39.000Z","0x1559c15f490fa5bed01d4280bf15143bf1bfbccb59df90e925c105865f4bdd39",["arb1:0x866CF7AE3d44dC5f7Dd3d4B36e8467F18fd2B9F2"]]
+      values.$upgradeCount:
+-        1
++        2
+      values.activeOutbox:
+-        "arb1:0x0000000000000000000000000000000000000000"
+      values.allowedDelayedInboxList:
+-        ["arb1:0xEe30EfcaF812d10e1EFE25E9458f76a39DAD3239","arb1:0x6e988B94C12194A925D7802FE75891364C312477"]
+      values.allowedOutboxList:
+-        ["arb1:0xa4270256B160C3Ebec2d6914a906c7EC38D8d072"]
+      values.delayedMessageCount:
+-        19264
+      values.inboxHistory:
+-        ["arb1:0xEe30EfcaF812d10e1EFE25E9458f76a39DAD3239","arb1:0x6e988B94C12194A925D7802FE75891364C312477"]
+      values.outboxHistory:
+-        ["arb1:0xa4270256B160C3Ebec2d6914a906c7EC38D8d072"]
+      values.rollup:
+-        "arb1:0x330F8fEB25f3427cABA32446728C36ae67f2135b"
+      values.sequencerInbox:
+-        "arb1:0x6eE94AD8057Fd7Ba4d47bb6278a261c8a9FD4E3f"
+      values.sequencerMessageCount:
+-        18943
+      values.sequencerReportedSubMessageCount:
+-        99429874
+      fieldMeta:
+-        {"allowedOutboxList":{"severity":"HIGH","description":"Can make calls as the bridge, steal all funds."},"outboxHistory":{"severity":"HIGH","description":"All Outboxes that were ever set as allowed in the bridge."},"allowedDelayedInboxList":{"severity":"HIGH","description":"Allowed to mint the gastoken on L2 and call `enqueueDelayedMessage()` on the bridge."},"inboxHistory":{"severity":"HIGH","description":"All Inboxes that were ever set as allowed in the bridge."}}
+      implementationNames.arb1:0xB23214f241bdEb275f7dCBfbb1EA79349101d4B0:
+-        "Bridge"
+      implementationNames.arb1:0x866CF7AE3d44dC5f7Dd3d4B36e8467F18fd2B9F2:
++        ""
+      category:
+-        {"name":"Local Infrastructure","priority":5}
+      unverified:
++        true
+    }
+```
+
+```diff
+-   Status: DELETED
+    contract RollupEventInbox (arb1:0x6e988B94C12194A925D7802FE75891364C312477)
+    +++ description: Helper contract sending configuration data over the bridge during the systems initialization.
+```
+
+```diff
+    contract Conduit Multisig 2 (arb1:0x79C2abE3eBA9dc119318FdAaA48118e1CDB53F56) {
+    +++ description: None
+      receivedPermissions.4:
+-        {"permission":"upgrade","from":"arb1:0x6e988B94C12194A925D7802FE75891364C312477","role":"admin","via":[{"address":"arb1:0x490C4c92Ea9FF02EE8277222C66afD80Bfb1b7c1"},{"address":"arb1:0x246bAB4F36095ABc74052Cc122c318298a9ef876"}]}
+    }
+```
+
+```diff
+    EOA  (arb1:0xF57362969fe0d5fcaeB8a3Cf2d185eF39A5b3BD6) {
+    +++ description: None
+      receivedPermissions.4:
+-        {"permission":"upgrade","from":"arb1:0x6e988B94C12194A925D7802FE75891364C312477","role":"admin","via":[{"address":"arb1:0x490C4c92Ea9FF02EE8277222C66afD80Bfb1b7c1"},{"address":"arb1:0x246bAB4F36095ABc74052Cc122c318298a9ef876"}]}
+    }
+```
+
+## Source code changes
+
+```diff
+.../Bridge/Bridge.sol => /dev/null                 | 733 ---------------------
+ .../RollupEventInbox.sol => /dev/null              | 133 ----
+ .../TransparentUpgradeableProxy.p.sol => /dev/null | 629 ------------------
+ 3 files changed, 1495 deletions(-)
+```
+
+Generated with discovered.json: 0xddc9ed9b0487eb44f3c88e5e3a49da4e8dd1bc8c
+
+# Diff at Fri, 10 Oct 2025 09:51:59 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@a91384a270a047b2514885e053feff1edc24f495 block: 1759481227
+- current timestamp: 1760089813
+
+## Description
+
+No more stakers. Project archived.
+
+## Watched changes
+
+```diff
+    contract UpgradeExecutor (arb1:0x246bAB4F36095ABc74052Cc122c318298a9ef876) {
+    +++ description: Central contract defining the access control permissions for upgrading the system contract implementations.
+      values.accessControl.EXECUTOR_ROLE.members.1:
++        "arb1:0xF57362969fe0d5fcaeB8a3Cf2d185eF39A5b3BD6"
+      values.executors.1:
++        "arb1:0xF57362969fe0d5fcaeB8a3Cf2d185eF39A5b3BD6"
+    }
+```
+
+```diff
+    contract RollupProxy (arb1:0x330F8fEB25f3427cABA32446728C36ae67f2135b) {
+    +++ description: Central contract for the project's configuration like its execution logic hash (`wasmModuleRoot`) and addresses of the other system contracts. Entry point for Proposers creating new Rollup Nodes (state commitments) and Challengers submitting fraud proofs (In the Orbit stack, these two roles are both held by the Validators).
+      values.stakerCount:
+-        1
++        0
+    }
+```
+
+Generated with discovered.json: 0x06cd8671443d461c7b9bf631c5d7834398319433
+
+# Diff at Fri, 03 Oct 2025 08:49:07 GMT:
+
+- author: vincfurc (<10850139+vincfurc@users.noreply.github.com>)
+- comparing to: main@e647409961cd173771dcfcaeb808991c99e73911 block: 1756452867
+- current timestamp: 1759481227
+
+## Description
+
+Member removed from multisig.
+
+## Watched changes
+
+```diff
+    contract Conduit Multisig 2 (arb1:0x79C2abE3eBA9dc119318FdAaA48118e1CDB53F56) {
+    +++ description: None
+      values.$members.2:
+-        "arb1:0x50930d652266EF4127FA3A1906B7Cb9951076628"
+      values.multisigThreshold:
+-        "4 of 11 (36%)"
++        "4 of 10 (40%)"
+    }
+```
+
+Generated with discovered.json: 0xf71cf06d0f4da4174a899d88d789d9c5a41259d1
+
+# Diff at Fri, 26 Sep 2025 13:09:20 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@ec4b16fd723bf2a8625a616c4b3a1119ce79fb29 block: 1756452867
+- current timestamp: 1756452867
+
+## Description
+
+add new celestia nitro wasmmoduleroot
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1756452867 (main branch discovery), not current.
+
+```diff
+    contract RollupProxy (arb1:0x330F8fEB25f3427cABA32446728C36ae67f2135b) {
+    +++ description: Central contract for the project's configuration like its execution logic hash (`wasmModuleRoot`) and addresses of the other system contracts. Entry point for Proposers creating new Rollup Nodes (state commitments) and Challengers submitting fraud proofs (In the Orbit stack, these two roles are both held by the Validators).
+      usedTypes.0.arg.0x597de35fc2ee60e5b2840157370d037542d6a4bc587af7f88202636c54e6bd8d:
++        "Celestia Nitro ArbOS v40 wasmModuleRoot"
+    }
+```
+
 Generated with discovered.json: 0x6500bf6bab71b523bf30d87c1a099e29d2f373fd
 
 # Diff at Mon, 01 Sep 2025 10:01:10 GMT:

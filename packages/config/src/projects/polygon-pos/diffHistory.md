@@ -1,3 +1,161 @@
+Generated with discovered.json: 0x6b3be109a853454ad5b79b78dbcf83b009aa4b25
+
+# Diff at Tue, 28 Oct 2025 09:18:05 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@090e135db1084f4a9678d6bf1cb0ff5e854903ea block: 1761060009
+- current timestamp: 1761643008
+
+## Description
+
+vali rm.
+
+## Watched changes
+
+```diff
+    contract StakeManager (eth:0x5e3Ef299fDDf15eAa0432E6e66473ace8c13D908) {
+    +++ description: None
+      values.currentValidatorSetSize:
+-        105
++        104
+    }
+```
+
+Generated with discovered.json: 0xca91ce0b5d242835e18af42fa9b0c75de0249f1f
+
+# Diff at Tue, 21 Oct 2025 15:21:26 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@d52ad2c1af6ac3243376427c1aab587fd7b34800 block: 1760536617
+- current timestamp: 1761060009
+
+## Description
+
+multisig member change.
+
+## Watched changes
+
+```diff
+    contract GnosisSafe (eth:0x424bDE99FCfB68c5a1218fd3215caFfD031f19C4) {
+    +++ description: None
+      values.$members.0:
++        "eth:0xF045025C845E786E343Df30cC6f67ec6BB822b34"
+      values.$members.6:
+-        "eth:0x4Fb38Ca1b96f8694229486636cabe029BdcdbBe7"
+    }
+```
+
+Generated with discovered.json: 0xe7b626b2f9d27577913c9f9cb54219f89afc27e7
+
+# Diff at Wed, 15 Oct 2025 13:58:15 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@3b2c8898ebe0c61228f50617e2de65973094dd39 block: 1758802148
+- current timestamp: 1760536617
+
+## Description
+
+vali added.
+
+## Watched changes
+
+```diff
+    contract StakeManager (eth:0x5e3Ef299fDDf15eAa0432E6e66473ace8c13D908) {
+    +++ description: None
+      values.currentValidatorSetSize:
+-        104
++        105
+    }
+```
+
+Generated with discovered.json: 0x49ed7d8c357d21f671e8bf9ece413ba47a849914
+
+# Diff at Mon, 06 Oct 2025 15:22:56 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@e58bd9f0913161b35e2a2c65f233464591d4f28b block: 1758802148
+- current timestamp: 1758802148
+
+## Description
+
+Config: added description to field.
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1758802148 (main branch discovery), not current.
+
+```diff
+    contract StakingInfo (eth:0xa59C847Bd5aC0172Ff4FE912C5d29E5A71A7512B) {
+    +++ description: Contains logging and getter functions about staking.
+      fieldMeta:
++        {"getAccountStateRoot":{"description":"Merkle root of a tree of validator balances."}}
+    }
+```
+
+Generated with discovered.json: 0x1a5d5e8b88e09d9975dd7355e5bf1dca560883ec
+
+# Diff at Thu, 25 Sep 2025 12:25:32 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@0baa1255a33ce1a02b431265f21e07fd28f2de49 block: 1758537508
+- current timestamp: 1758802148
+
+## Description
+
+vali removed.
+
+config: added act permission in the governance contract.
+
+## Watched changes
+
+```diff
+    contract StakeManager (eth:0x5e3Ef299fDDf15eAa0432E6e66473ace8c13D908) {
+    +++ description: None
+      values.currentValidatorSetSize:
+-        105
++        104
+    }
+```
+
+## Config/verification related changes
+
+Following changes come from updates made to the config file,
+or/and contracts becoming verified, not from differences found during
+discovery. Values are for block 1758537508 (main branch discovery), not current.
+
+```diff
+    contract Timelock (eth:0xCaf0aa768A3AE1297DF20072419Db8Bb8b5C8cEf) {
+    +++ description: None
+      directlyReceivedPermissions:
++        [{"permission":"act","from":"eth:0x6e7a5820baD6cebA8Ef5ea69c0C92EbbDAc9CE48","role":".owner"}]
+    }
+```
+
+Generated with discovered.json: 0xfb40664525cb27185abc3bad0e3b1a144ee517e0
+
+# Diff at Mon, 22 Sep 2025 10:39:57 GMT:
+
+- author: sekuba (<29250140+sekuba@users.noreply.github.com>)
+- comparing to: main@3aa102df1ae0b60ff981cfe12b1d0c919b4c2704 block: 1756995439
+- current timestamp: 1758537508
+
+## Description
+
+one vali added.
+
+## Watched changes
+
+```diff
+    contract StakeManager (eth:0x5e3Ef299fDDf15eAa0432E6e66473ace8c13D908) {
+    +++ description: None
+      values.currentValidatorSetSize:
+-        104
++        105
+    }
+```
+
 Generated with discovered.json: 0x7993b8a3ba77e6aa11b73897afbddcd8326397a7
 
 # Diff at Fri, 12 Sep 2025 08:17:20 GMT:

@@ -2,7 +2,7 @@ import { assertUnreachable } from '@l2beat/shared-pure'
 import { Command as CommandPrimitive } from 'cmdk'
 import fuzzysort from 'fuzzysort'
 import groupBy from 'lodash/groupBy'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Command,
   CommandDialog,
@@ -47,6 +47,13 @@ export function SearchBarDialog({ recentlyAdded }: Props) {
       enabled: debouncedValue !== '',
     },
   )
+
+  useEffect(() => {
+    if (debouncedValue === '') return
+    track('searchBarSearched', {
+      props: { value: debouncedValue },
+    })
+  }, [debouncedValue, track])
 
   const filteredPages = useMemo(
     () =>
@@ -277,7 +284,7 @@ function entryToLabel(entry: AnySearchBarEntry) {
     case 'da':
       return 'DA Layer'
     case 'zkCatalog':
-      return undefined
+      return 'ZK Project'
     case 'ecosystem':
       return 'Ecosystem'
     default:
