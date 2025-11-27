@@ -5,6 +5,7 @@ import compact from 'lodash/compact'
 import groupBy from 'lodash/groupBy'
 import { getDefaultSubtype } from '~/components/chart/liveness/getDefaultSubtype'
 import type { LivenessSectionProps } from '~/components/projects/sections/LivenessSection'
+import { env } from '~/env'
 import type { ProjectsChangeReport } from '~/server/features/projects-change-report/getProjectsChangeReport'
 import type { LivenessProject } from '~/server/features/scaling/liveness/types'
 import { getHasTrackedContractChanged } from '~/server/features/scaling/liveness/utils/getHasTrackedContractChanged'
@@ -46,11 +47,9 @@ export async function getLivenessSection(
     duplicatedData,
   ]) as TrackedTxsConfigSubtype[]
 
-  const range = project.archivedAt ? 'max' : '30d'
-
   const data = await helpers.liveness.projectChart.fetch({
     projectId: project.id,
-    range,
+    range: 'max',
     subtype: getDefaultSubtype(configuredSubtypes),
   })
 
@@ -68,7 +67,8 @@ export async function getLivenessSection(
     anomalies: liveness?.anomalies ?? [],
     hasTrackedContractsChanged,
     trackedTransactions,
-    defaultRange: range,
+    defaultRange: project.archivedAt ? 'max' : '30d',
     isArchived: project.archivedAt !== undefined,
+    bigQueryOutage: env.CLIENT_SIDE_BIG_QUERY_OUTAGE,
   }
 }

@@ -275,7 +275,7 @@ function defaultStateValidation(
       references: [
         {
           title: 'How is fraud proven - Arbitrum documentation FAQ',
-          url: 'https://docs.arbitrum.io/how-arbitrum-works/validation-and-proving/validation-and-proving',
+          url: 'https://docs.arbitrum.io/get-started/arbitrum-introduction',
         },
       ],
     },
@@ -700,7 +700,7 @@ function orbitStackCommon(
       })(),
     milestones: templateVars.milestones ?? [],
     badges: mergeBadges(automaticBadges, templateVars.additionalBadges ?? []),
-    customDa: templateVars.customDa,
+    customDa: postsToDAC(templateVars) ? templateVars.customDa : undefined,
     reasonsForBeingOther: templateVars.reasonsForBeingOther,
     dataAvailability: extractDAs(daProviders),
     scopeOfAssessment: templateVars.scopeOfAssessment,
@@ -1066,8 +1066,8 @@ function getDAProviders(
           (hostChainDA?.layer ?? usesBlobs)
             ? DA_LAYERS.ETH_BLOBS_OR_CALLDATA
             : DA_LAYERS.ETH_CALLDATA,
-        bridge: hostChainDA?.layer ?? DA_BRIDGES.ENSHRINED,
-        mode: hostChainDA?.layer ?? DA_MODES.TRANSACTION_DATA_COMPRESSED,
+        bridge: hostChainDA?.bridge ?? DA_BRIDGES.ENSHRINED,
+        mode: hostChainDA?.mode ?? DA_MODES.TRANSACTION_DATA_COMPRESSED,
         badge:
           hostChainDA?.badge ??
           (usesBlobs ? BADGES.DA.EthereumBlobs : BADGES.DA.EthereumCalldata),
@@ -1110,7 +1110,8 @@ function getDAProviders(
   const isUsingValidBlobstreamWmr =
     wmrValidForBlobstream.includes(wasmModuleRoot)
 
-  if (isUsingValidBlobstreamWmr) {
+  // Only add Celestia if NOT posting to DAC (sequencerVersion !== 0x88)
+  if (isUsingValidBlobstreamWmr && !postsToDAC(templateVars)) {
     if (templateVars.celestiaProofSystemInactive) {
       result.push({
         riskViewDA: RISK_VIEW.DATA_CELESTIA(false),
@@ -1148,7 +1149,8 @@ function getDAProviders(
     templateVars.discovery.getContractValue<string>(
       'SequencerInbox',
       'espressoTEEVerifier',
-    ) !== EthereumAddress.ZERO
+    ) !== EthereumAddress.ZERO &&
+    !templateVars.discovery.hasContract('EspressoNitroTEEVerifier_neutered') // this one is here because of apechain, who deployed a backdoored TEE verifier
 
   const isUsingEspressonAndDac =
     isUsingEspressoSequencer && postsToDAC(templateVars)

@@ -1,3 +1,4 @@
+import { Address32 } from '@l2beat/shared-pure'
 import {
   Dispatch,
   HYPERLANE_NETWORKS,
@@ -8,7 +9,6 @@ import {
   parseProcessId,
 } from './hyperlane'
 import {
-  Address32,
   createEventParser,
   createInteropEventType,
   findChain,
@@ -68,7 +68,7 @@ export class HyperlaneHwrPlugin implements InteropPlugin {
       )
 
       return [
-        HwrTransferSent.create(input.ctx, {
+        HwrTransferSent.create(input, {
           messageId,
           $dstChain,
           destination: Number(sentTransferRemote.destination),
@@ -91,7 +91,7 @@ export class HyperlaneHwrPlugin implements InteropPlugin {
       )
 
       return [
-        HwrTransferReceived.create(input.ctx, {
+        HwrTransferReceived.create(input, {
           messageId,
           $srcChain,
           origin: Number(receivedTransferRemote.origin),

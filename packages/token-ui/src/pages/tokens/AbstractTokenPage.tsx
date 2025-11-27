@@ -20,12 +20,11 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '~/components/core/Empty'
-import { Spinner } from '~/components/core/Spinner'
 import {
   AbstractTokenForm,
   AbstractTokenSchema,
 } from '~/components/forms/AbstractTokenForm'
-import { LoadingText } from '~/components/LoadingText'
+import { LoadingState } from '~/components/LoadingState'
 import { PlanConfirmationDialog } from '~/components/PlanConfirmationDialog'
 import { AppLayout } from '~/layouts/AppLayout'
 import type { AbstractTokenWithDeployedTokens } from '~/mock/types'
@@ -46,7 +45,11 @@ export function AbstractTokenPage() {
 
   return (
     <AppLayout>
-      {data ? <AbstractTokenView token={data} /> : <LoadingText />}
+      {data ? (
+        <AbstractTokenView token={data} />
+      ) : (
+        <LoadingState className="h-full" />
+      )}
     </AppLayout>
   )
 }
@@ -151,14 +154,7 @@ function AbstractTokenView({
             </CardHeader>
             <CardContent>
               {isLoadingSuggestions ? (
-                <Empty>
-                  <EmptyHeader>
-                    <EmptyMedia variant="icon">
-                      <Spinner />
-                    </EmptyMedia>
-                    <EmptyTitle>Loading...</EmptyTitle>
-                  </EmptyHeader>
-                </Empty>
+                <LoadingState />
               ) : suggestions && suggestions.length !== 0 ? (
                 <div className="-mx-6 flex flex-col gap-2">
                   {suggestions.map((suggestion) => {
@@ -168,7 +164,7 @@ function AbstractTokenView({
                         className="flex items-center justify-between gap-2 px-6 odd:bg-muted"
                       >
                         {suggestion.chain} ({suggestion.address})
-                        <Button variant="link" asChild>
+                        <Button variant="link" asChild size="icon">
                           <Link
                             to={buildUrlWithParams('/tokens/new', {
                               tab: 'deployed',
@@ -211,7 +207,7 @@ function AbstractTokenView({
                     className="flex items-center justify-between gap-2 px-6 odd:bg-muted"
                   >
                     {token.chain} ({token.symbol})
-                    <Button asChild variant="link">
+                    <Button asChild variant="link" size="icon">
                       <Link to={`/tokens/${token.chain}/${token.address}`}>
                         <ArrowRightIcon />
                       </Link>
@@ -239,6 +235,7 @@ function AbstractTokenView({
         <ButtonWithSpinner
           variant="destructive"
           className="mt-2"
+          size="icon"
           onClick={() => {
             planMutate({
               type: 'DeleteAbstractTokenIntent',

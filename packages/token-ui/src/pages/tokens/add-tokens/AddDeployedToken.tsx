@@ -38,6 +38,7 @@ import { Textarea } from '~/components/core/TextArea'
 import {
   DeployedTokenForm,
   DeployedTokenSchema,
+  fieldToDataSource,
   setDeployedTokenExistsError,
 } from '~/components/forms/DeployedTokenForm'
 import { PlanConfirmationDialog } from '~/components/PlanConfirmationDialog'
@@ -76,6 +77,9 @@ export function AddDeployedToken() {
       }
     },
   })
+
+  const { data: chains, isLoading: isLoadingChains } =
+    api.chains.getAll.useQuery()
 
   const chain = form.watch('chain')
   const address = form.watch('address')
@@ -174,6 +178,8 @@ export function AddDeployedToken() {
     setQueue((prev) => [...prev, ...tokens])
   }
 
+  const chainRecord = chains?.find((c) => c.name === chain)
+
   return (
     <>
       <PlanConfirmationDialog
@@ -208,6 +214,10 @@ export function AddDeployedToken() {
             form={form}
             onSubmit={onSubmit}
             isFormDisabled={isPending}
+            chains={{
+              data: chains,
+              loading: isLoadingChains,
+            }}
             tokenDetails={{
               data: checks,
               loading: checksLoading,
@@ -216,6 +226,20 @@ export function AddDeployedToken() {
               data: abstractTokens,
               loading: areAbstractTokensLoading,
             }}
+            autofill={
+              chainRecord
+                ? {
+                    symbol: true,
+                    decimals: !!chainRecord.apis?.some((api) =>
+                      fieldToDataSource.decimals.includes(api.type),
+                    ),
+                    deploymentTimestamp: !!chainRecord.apis?.some((api) =>
+                      fieldToDataSource.deploymentTimestamp.includes(api.type),
+                    ),
+                    abstractTokenId: true,
+                  }
+                : undefined
+            }
           >
             <div className="flex flex-col gap-4">
               <div className="flex gap-2">
@@ -235,6 +259,11 @@ export function AddDeployedToken() {
                   onClick={() => {
                     const next = queue.at(0)
                     setQueue((prev) => prev.slice(1))
+                    form.resetField('symbol')
+                    form.resetField('decimals')
+                    form.resetField('deploymentTimestamp')
+                    form.resetField('abstractTokenId')
+                    form.resetField('comment')
 
                     if (next) {
                       setSearchParams((prev) => {
@@ -263,6 +292,7 @@ export function AddDeployedToken() {
           <SheetTrigger asChild>
             <Button
               variant="outline"
+              size="icon"
               type="button"
               className="absolute top-2 left-full ml-2"
             >
@@ -328,6 +358,7 @@ function Suggestions({
                   ) : (
                     <Button
                       variant="link"
+                      size="icon"
                       onClick={() =>
                         addToQueue(suggestion.chain, suggestion.address)
                       }
@@ -336,7 +367,7 @@ function Suggestions({
                     </Button>
                   )}
 
-                  <Button variant="link" asChild>
+                  <Button variant="link" size="icon" asChild>
                     <Link
                       to={buildUrlWithParams('/tokens/new', {
                         tab: 'deployed',
@@ -430,7 +461,7 @@ function Queue({
             }}
             placeholder="ethereum,0x1234567890123456789012345678901234567890&#10;arbitrum,0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
             rows={10}
-            className="font-mono text-sm"
+            className="max-h-[192px] font-mono text-sm"
           />
           {error && <p className="text-destructive text-sm">{error}</p>}
         </div>

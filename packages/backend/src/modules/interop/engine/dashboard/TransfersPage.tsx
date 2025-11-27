@@ -1,8 +1,7 @@
 import type { InteropTransferRecord } from '@l2beat/database'
-import { EthereumAddress, formatSeconds } from '@l2beat/shared-pure'
+import { Address32, formatSeconds } from '@l2beat/shared-pure'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { Address32 } from '../../plugins/types'
 import { DataTablePage } from './DataTablePage'
 import { formatDollars } from './formatDollars'
 import {
@@ -38,7 +37,9 @@ function TransfersTable(props: {
           const dstExplorerUrl = e.dstChain && props.getExplorerUrl(e.dstChain)
 
           return (
-            <tr>
+            <tr
+              key={`${e.srcChain}-${e.srcTxHash}-${e.dstChain}-${e.dstTxHash}`}
+            >
               <td data-order={e.timestamp}>
                 {new Date(e.timestamp * 1000).toLocaleString()}
               </td>
@@ -65,19 +66,10 @@ function TransfersTable(props: {
                 )}
               </td>
               <td>
-                {srcExplorerUrl &&
-                  e.srcTokenAddress &&
-                  e.srcTokenAddress !== 'native' &&
-                  e.srcTokenAddress !== EthereumAddress.ZERO && (
-                    <a
-                      target="_blank"
-                      href={`${srcExplorerUrl}/address/${Address32.cropToEthereumAddress(Address32(e.srcTokenAddress))}`}
-                    >
-                      {Address32.cropToEthereumAddress(
-                        Address32(e.srcTokenAddress),
-                      )}
-                    </a>
-                  )}
+                <TokenAddress
+                  explorerUrl={srcExplorerUrl}
+                  address={e.srcTokenAddress}
+                />
               </td>
               <td>{e.dstChain}</td>
               <td>
@@ -93,25 +85,45 @@ function TransfersTable(props: {
                 )}
               </td>
               <td>
-                {dstExplorerUrl &&
-                  e.dstTokenAddress &&
-                  e.dstTokenAddress !== 'native' &&
-                  e.dstTokenAddress !== EthereumAddress.ZERO && (
-                    <a
-                      target="_blank"
-                      href={`${dstExplorerUrl}/address/${Address32.cropToEthereumAddress(Address32(e.dstTokenAddress))}`}
-                    >
-                      {Address32.cropToEthereumAddress(
-                        Address32(e.dstTokenAddress),
-                      )}
-                    </a>
-                  )}
+                <TokenAddress
+                  explorerUrl={dstExplorerUrl}
+                  address={e.dstTokenAddress}
+                />
               </td>
             </tr>
           )
         })}
       </tbody>
     </table>
+  )
+}
+
+function TokenAddress({
+  explorerUrl,
+  address,
+}: {
+  explorerUrl: string | undefined
+  address: string | undefined
+}) {
+  if (address === undefined) {
+    return <span>undefined</span>
+  }
+  if (address === Address32.NATIVE) {
+    return <span>native</span>
+  }
+  if (address === Address32.ZERO) {
+    return <span>0x0</span>
+  }
+  if (!explorerUrl) {
+    return null
+  }
+  return (
+    <a
+      target="_blank"
+      href={`${explorerUrl}/address/${Address32.cropToEthereumAddress(Address32(address))}`}
+    >
+      {Address32.cropToEthereumAddress(Address32(address))}
+    </a>
   )
 }
 

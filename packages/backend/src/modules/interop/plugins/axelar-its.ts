@@ -12,6 +12,7 @@ DST EXECUTE:
 
 */
 
+import { Address32 } from '@l2beat/shared-pure'
 import {
   AXELAR_NETWORKS,
   ContractCall,
@@ -19,7 +20,6 @@ import {
   ContractCallExecuted,
 } from './axelar'
 import {
-  Address32,
   createEventParser,
   createInteropEventType,
   findChain,
@@ -86,12 +86,12 @@ export class AxelarITSPlugin implements InteropPlugin {
     const interchainTransfer = parseInterchainTransfer(input.log, null)
     if (interchainTransfer) {
       return [
-        InterchainTransfer.create(input.ctx, {
+        InterchainTransfer.create(input, {
           tokenId: interchainTransfer.tokenId,
           amount: interchainTransfer.amount,
           tokenAddress:
             ITS_TOKENS.find((t) => t.tokenId === interchainTransfer.tokenId)
-              ?.tokenAddresses[input.ctx.chain] ?? Address32.ZERO,
+              ?.tokenAddresses[input.chain] ?? Address32.ZERO,
           $dstChain: findChain(
             AXELAR_NETWORKS,
             (x) => x.axelarChainName,
@@ -107,14 +107,14 @@ export class AxelarITSPlugin implements InteropPlugin {
     )
     if (interchainTransferReceived) {
       return [
-        InterchainTransferReceived.create(input.ctx, {
+        InterchainTransferReceived.create(input, {
           commandId: interchainTransferReceived.commandId,
           tokenId: interchainTransferReceived.tokenId,
           amount: interchainTransferReceived.amount,
           tokenAddress:
             ITS_TOKENS.find(
               (t) => t.tokenId === interchainTransferReceived.tokenId,
-            )?.tokenAddresses[input.ctx.chain] ?? Address32.ZERO,
+            )?.tokenAddresses[input.chain] ?? Address32.ZERO,
           $srcChain: findChain(
             AXELAR_NETWORKS,
             (x) => x.axelarChainName,
