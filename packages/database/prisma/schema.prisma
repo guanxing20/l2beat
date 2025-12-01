@@ -352,16 +352,10 @@ model InteropEvent {
   expiresAt DateTime @db.Timestamp(6)
   timestamp DateTime @db.Timestamp(6)
 
-  chain       String  @db.VarChar(32)
+  chain       String @db.VarChar(32)
   blockNumber Int
-  txHash      String  @db.VarChar(66)
-  blockHash   String  @db.VarChar(66)
-  value       String? @db.VarChar(66)
-  txTo        String? @db.VarChar(66)
-  calldata    String  @default("0x") @db.Text
-  logIndex    Int?
   args        Json
-  ctx         Json    @default("{}")
+  ctx         Json   @default("{}")
 
   matched     Boolean
   unsupported Boolean
@@ -487,6 +481,7 @@ model DeployedToken {
   decimals            Int
   deploymentTimestamp DateTime @db.Timestamp(6)
   comment             String?  @db.Text
+  metadata            Json?
 
   chainRelation   Chain?            @relation(fields: [chain], references: [name], onDelete: Restrict)
   abstractToken   AbstractToken?    @relation(fields: [abstractTokenId], references: [id], onDelete: Restrict)
